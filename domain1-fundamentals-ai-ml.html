@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS AI Practitioner — Domain 1: Fundamentals of AI &amp; ML</title>
+  <style>
+    /* Visual language inspired by apple.com: neutral canvas, system type, minimal chrome */
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --text-2: #424245;
+      --muted: #86868b;
+      --border: rgba(0, 0, 0, 0.08);
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --ok: #34c759;
+      --slide-padding: clamp(1.25rem, 4vw, 3rem);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.47059;
+      position: relative;
+      font-synthesis: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(120% 80% at 50% -10%, #ffffff 0%, var(--bg) 45%),
+        var(--bg);
+      pointer-events: none;
+    }
+
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: var(--slide-padding);
+      padding-bottom: calc(var(--slide-padding) + 3.5rem);
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+      overflow-y: auto;
+      animation: fadeIn 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.015em;
+      line-height: 1.08;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: clamp(1.25rem, 2.8vw, 1.75rem);
+      font-weight: 600;
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.012em;
+      color: var(--text-2);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.15rem 0 0.45rem;
+      color: var(--text);
+    }
+
+    p, li {
+      font-size: clamp(0.94rem, 1.9vw, 1.0625rem);
+      max-width: 52ch;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+      color: var(--muted);
+    }
+
+    .slide ul {
+      margin: 0.5rem 0 1rem 1.1rem;
+      color: var(--muted);
+    }
+
+    .slide li {
+      margin-bottom: 0.45rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.69rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+    }
+
+    .title-slide h1 {
+      margin-bottom: 0.65rem;
+    }
+
+    .title-slide .subtitle {
+      font-size: 1.1875rem;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 50ch;
+      line-height: 1.4211;
+    }
+
+    .diagram-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.25rem 1.25rem 0.75rem;
+      margin: 1.1rem 0;
+      overflow-x: auto;
+      flex-shrink: 0;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .diagram-wrap .mermaid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 140px;
+    }
+
+    .diagram-wrap .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 0.65rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .callout {
+      background: #f5f5f7;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.15rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1rem 0;
+      max-width: 58ch;
+    }
+
+    .callout strong {
+      color: var(--text);
+    }
+
+    .toolbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.7rem max(1.25rem, calc((100vw - 980px) / 2));
+      background: rgba(255, 255, 255, 0.72);
+      border-top: 1px solid var(--border);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      z-index: 100;
+    }
+
+    .toolbar button {
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 0.875rem;
+      background: var(--accent);
+      border: none;
+      color: #ffffff;
+      padding: 0.55rem 1.35rem;
+      border-radius: 980px;
+      cursor: pointer;
+      min-width: 5.5rem;
+      transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
+    }
+
+    .toolbar button:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .toolbar button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .toolbar button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .progress {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: auto;
+      padding-top: 1.5rem;
+    }
+
+    .title-slide .hint {
+      margin-top: 2rem;
+    }
+
+    h3.def-heading {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-top: 1.35rem;
+      margin-bottom: 0.45rem;
+      font-weight: 600;
+    }
+
+    dl.def-list {
+      margin: 0 0 0.5rem;
+      max-width: 58ch;
+      padding: 0.5rem 0;
+    }
+
+    dl.def-list dt {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      margin-top: 0.6rem;
+    }
+
+    dl.def-list dt:first-child {
+      margin-top: 0;
+    }
+
+    dl.def-list dd {
+      color: var(--muted);
+      margin: 0.15rem 0 0;
+      padding: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .def-list.compact dd {
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <!-- 0 -->
+    <section class="slide active title-slide" data-i="0">
+      <span class="badge">AWS Certified AI Practitioner · Domain 1 · ~20%</span>
+      <h1>Fundamentals of AI &amp; ML</h1>
+      <p class="subtitle">Concepts, data, learning types, training vs inference, lifecycle, MLOps, and metrics—aligned to the official AIF-C01 exam guide. Each topic slide includes a <strong style="color:var(--text)">Definitions</strong> section; use the master glossary slide for cram review.</p>
+      <p class="hint">Use ← → or click Next · Open this file in any browser (online for diagrams)</p>
+    </section>
+
+    <!-- 1 -->
+    <section class="slide" data-i="1">
+      <span class="badge">1.1 · Concepts</span>
+      <h2>AI ⊃ ML ⊃ Deep Learning</h2>
+      <p><strong style="color:var(--text)">AI</strong> = goal: intelligent behavior. <strong style="color:var(--text)">ML</strong> = learn patterns from data. <strong style="color:var(--text)">DL</strong> = ML using deep neural networks (often best for text, images, audio at scale).</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  subgraph AI["Artificial Intelligence AI"]
+    subgraph ML["Machine Learning ML"]
+      subgraph DL["Deep Learning DL"]
+        N[Deep neural networks]
+      end
+      C["Classical ML: e.g. logistic regression, random forests, gradient boosting"]
+    end
+    R["Other AI: rules, search, expert systems — less common in modern product AI"]
+  end
+        </pre>
+      </div>
+      <div class="callout"><strong>Exam tip:</strong> “Improves from examples / historical data” → ML. “Many layers, unstructured data” → often DL.</div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Artificial intelligence (AI)</dt>
+        <dd>The broad field of making systems perform tasks that need human-like perception, reasoning, language, planning, or decision-making—using rules, search, optimization, machine learning, or other methods.</dd>
+        <dt>Machine learning (ML)</dt>
+        <dd>A branch of AI where behavior improves from <strong style="color:var(--text)">data</strong>: algorithms adjust internal parameters so predictions or actions get better on examples rather than relying only on hand-written rules.</dd>
+        <dt>Deep learning (DL)</dt>
+        <dd>Machine learning that uses <strong style="color:var(--text)">deep neural networks</strong> (many layers) to learn representations—especially strong for unstructured inputs like text, images, and audio.</dd>
+        <dt>Neural network</dt>
+        <dd>A model made of interconnected units (neurons) organized in layers; each connection has a weight the training process updates.</dd>
+        <dt>Classical machine learning</dt>
+        <dd>Traditional ML models that are often shallower or non-neural—e.g. logistic regression, decision trees, random forests, gradient boosting—for tabular and structured problems.</dd>
+      </dl>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" data-i="2">
+      <span class="badge">1.1 · Data</span>
+      <h2>Structured vs unstructured · Labeled vs unlabeled</h2>
+      <div class="two-col">
+        <div>
+          <h3>Data shapes</h3>
+          <ul>
+            <li><strong style="color:var(--text)">Structured:</strong> tables, time series</li>
+            <li><strong style="color:var(--text)">Unstructured:</strong> text, images, audio</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Labels</h3>
+          <ul>
+            <li><strong style="color:var(--text)">Labeled:</strong> input + known target (spam/not spam)</li>
+            <li><strong style="color:var(--text)">Unlabeled:</strong> find structure (clusters) or use self-supervised in DL</li>
+          </ul>
+        </div>
+      </div>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  subgraph structured["Structured"]
+    T["Tabular rows and columns"]
+    TS[Time series]
+  end
+  subgraph unstructured["Unstructured"]
+    TXT[Text]
+    IMG[Images]
+    AUD[Audio]
+  end
+  L["Labeled: input + known answer"]
+  U["Unlabeled: input only"]
+  structured --> L
+  structured --> U
+  unstructured --> L
+  unstructured --> U
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Structured data</dt>
+        <dd>Information organized in clear fields—rows/columns in tables, or time-ordered measurements—easy to query and aggregate (e.g. CRM records, sales per day).</dd>
+        <dt>Unstructured data</dt>
+        <dd>Raw content without a fixed schema: free text, images, audio, video—requires encoding or models to interpret.</dd>
+        <dt>Tabular data</dt>
+        <dd>Examples as rows and features as columns (spreadsheet-style); common input for classical ML.</dd>
+        <dt>Time series</dt>
+        <dd>Values indexed by time (metrics, sensors, stock prices); order in time usually matters for modeling.</dd>
+        <dt>Labeled data</dt>
+        <dd>Each training example includes the <strong style="color:var(--text)">correct answer</strong> (target/label) the model should learn to predict.</dd>
+        <dt>Unlabeled data</dt>
+        <dd>Inputs without supplied targets—used for finding structure (clustering) or for methods that invent supervision from the data (e.g. self-supervised pre-training in deep learning).</dd>
+      </dl>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" data-i="3">
+      <span class="badge">1.1 · Learning types</span>
+      <h2>Supervised learning</h2>
+      <p>Inputs + <strong style="color:var(--text)">correct outputs (labels)</strong>. Learn mapping X → ŷ. <strong style="color:var(--text)">Regression</strong> predicts a number. <strong style="color:var(--text)">Classification</strong> predicts a category.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  X["Features / input X"] --> M[Model]
+  M --> Yhat[Prediction ŷ]
+  Ytrue[True label y] -.->|"compare error"| M
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Supervised learning</dt>
+        <dd>Training with <strong style="color:var(--text)">input–output pairs</strong>; the model learns to map inputs to known labels.</dd>
+        <dt>Features</dt>
+        <dd>The measurable inputs (columns, signals) the model uses to make a prediction—also called predictors or independent variables.</dd>
+        <dt>Label (target)</dt>
+        <dd>The value the model is trained to predict (class, number, or ranking).</dd>
+        <dt>Model</dt>
+        <dd>A learned function (with parameters/weights) that turns inputs into outputs.</dd>
+        <dt>Regression</dt>
+        <dd>Supervised task: predict a <strong style="color:var(--text)">continuous number</strong> (price, demand, risk score).</dd>
+        <dt>Classification</dt>
+        <dd>Supervised task: predict a <strong style="color:var(--text)">category</strong> (spam/ham, defect type, churn yes/no).</dd>
+        <dt>Prediction (ŷ)</dt>
+        <dd>The model’s output for a given input; compared to the true label during training to compute error.</dd>
+      </dl>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-i="4">
+      <span class="badge">1.1 · Learning types</span>
+      <h2>Unsupervised · Reinforcement learning</h2>
+      <div class="two-col">
+        <div>
+          <h3>Unsupervised</h3>
+          <p>Mostly no labels. Discover <strong style="color:var(--text)">patterns</strong>: clustering, segments, anomalies.</p>
+          <div class="diagram-wrap">
+            <pre class="mermaid">
+flowchart LR
+  D[Unlabeled data] --> U[Algorithm]
+  U --> P["Patterns: clusters / structure"]
+            </pre>
+          </div>
+        </div>
+        <div>
+          <h3>Reinforcement learning</h3>
+          <p><strong style="color:var(--text)">Agent</strong> acts → <strong style="color:var(--text)">environment</strong> → <strong style="color:var(--text)">reward</strong>. Learn a policy (what action to take).</p>
+          <div class="diagram-wrap">
+            <pre class="mermaid">
+flowchart LR
+  A[Agent chooses action] --> E[Environment]
+  E --> R[Reward signal]
+  R --> A
+            </pre>
+          </div>
+        </div>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Unsupervised learning</dt>
+        <dd>Learning <strong style="color:var(--text)">without provided labels</strong>; goal is often grouping, compression, density estimation, or anomaly detection.</dd>
+        <dt>Clustering</dt>
+        <dd>Partitioning examples into groups so similar items are together (e.g. customer segments) without predefined segment names.</dd>
+        <dt>Reinforcement learning (RL)</dt>
+        <dd>An agent takes <strong style="color:var(--text)">actions</strong> in an <strong style="color:var(--text)">environment</strong>, receives <strong style="color:var(--text)">rewards</strong>, and learns a policy to maximize long-term reward.</dd>
+        <dt>Agent</dt>
+        <dd>The decision-maker that selects actions based on observations (state).</dd>
+        <dt>Environment</dt>
+        <dd>Everything outside the agent that responds to actions and produces the next state and reward.</dd>
+        <dt>Reward</dt>
+        <dd>A scalar feedback signal telling the agent how good the last action was.</dd>
+        <dt>Policy</dt>
+        <dd>The strategy mapping states (or observations) to actions—what the RL algorithm optimizes.</dd>
+      </dl>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-i="5">
+      <span class="badge">1.1 · Inference</span>
+      <h2>Training vs inference · Batch vs real-time</h2>
+      <p><strong style="color:var(--text)">Training</strong> adjusts the model from data. <strong style="color:var(--text)">Inference</strong> runs the trained model on new inputs (what users and apps usually hit).</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  subgraph train["Training phase"]
+    D1[Training data] --> T["Train / fit model"]
+    T --> W["Learned parameters weights"]
+  end
+  subgraph infer["Inference phase"]
+    D2[New data] --> M["Model uses weights"]
+    M --> O["Predictions / outputs"]
+  end
+  train --> infer
+        </pre>
+      </div>
+      <div class="two-col">
+        <div class="callout"><strong>Batch inference:</strong> many records on a schedule; throughput matters.</div>
+        <div class="callout"><strong>Real-time:</strong> API-style, low latency per request.</div>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Training</dt>
+        <dd>The phase where the model’s <strong style="color:var(--text)">parameters (weights)</strong> are updated using data and an optimization process so error decreases on training examples.</dd>
+        <dt>Inference</dt>
+        <dd>Using a <strong style="color:var(--text)">trained</strong> model on new data to produce outputs (predictions, scores, classes)—usually without updating weights.</dd>
+        <dt>Parameters / weights</dt>
+        <dd>Internal numbers learned during training that define the model’s behavior.</dd>
+        <dt>Batch inference</dt>
+        <dd>Scoring many records in bulk (e.g. nightly job); optimizing for <strong style="color:var(--text)">throughput</strong> and total runtime rather than single-request latency.</dd>
+        <dt>Real-time (online) inference</dt>
+        <dd>Serving predictions per request (API); optimizing for <strong style="color:var(--text)">low latency</strong> per interaction.</dd>
+      </dl>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-i="6">
+      <span class="badge">1.2 · Use cases</span>
+      <h2>When ML fits · When it doesn’t</h2>
+      <p>ML helps when data has signal, outcome is measurable, and scale beats hand-written rules. Avoid ML when a simple rule suffices, data or labels are insufficient, or cost outweighs benefit.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  Q{"Does a simple rule solve it cheaply?"}
+  Q -->|Yes| R1["Start with rules / deterministic logic"]
+  Q -->|No| Q2{"Do you have enough quality data and a measurable target?"}
+  Q2 -->|No| R2["Fix data / process first"]
+  Q2 -->|Yes| R3["Candidate for ML"]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Signal (in data)</dt>
+        <dd>Real, repeatable patterns that relate inputs to outcomes—what makes learning possible; noise is randomness that does not generalize.</dd>
+        <dt>Use case</dt>
+        <dd>A specific business problem + success criteria where AI/ML might help (e.g. “rank support tickets by urgency”).</dd>
+        <dt>Deterministic rule</dt>
+        <dd>Fixed logic that always gives the same output for the same input (if/then, thresholds with no learned parameters)—often the first baseline before ML.</dd>
+        <dt>Cost–benefit analysis</dt>
+        <dd>Comparing data, build, maintenance, risk, and governance costs against expected business value before committing to ML.</dd>
+        <dt>Ground truth</dt>
+        <dd>The best available “correct” labels or outcomes used for training or evaluation—sometimes imperfect or delayed in real systems.</dd>
+      </dl>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide" data-i="7">
+      <span class="badge">1.2 · AWS · Conceptual</span>
+      <h2>Managed AI / ML services (examples)</h2>
+      <p>The exam expects recognition of <strong style="color:var(--text)">SageMaker</strong> as the broad ML platform, plus APIs for specific tasks—you choose by <strong style="color:var(--text)">modality and problem</strong>, not memorizing every edge case.</p>
+      <ul>
+        <li><strong style="color:var(--text)">Text NLP:</strong> Comprehend, Lex (conversational)</li>
+        <li><strong style="color:var(--text)">Speech / language:</strong> Transcribe, Translate, Polly</li>
+        <li><strong style="color:var(--text)">Vision / docs:</strong> Rekognition, Textract</li>
+        <li><strong style="color:var(--text)">Custom ML ops:</strong> SageMaker training, endpoints, monitoring</li>
+      </ul>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Managed AI / ML service</dt>
+        <dd>A cloud API or console workflow where AWS runs and scales the model infrastructure; you integrate via API instead of operating raw servers for that piece.</dd>
+        <dt>Modality</dt>
+        <dd>The type of input/output medium: <strong style="color:var(--text)">text</strong>, <strong style="color:var(--text)">speech</strong>, <strong style="color:var(--text)">image</strong>, <strong style="color:var(--text)">document</strong>, etc.—service choice depends on modality and task.</dd>
+        <dt>Amazon SageMaker</dt>
+        <dd>AWS’s broad platform for building, training, tuning, deploying, and monitoring custom ML—notebooks, pipelines, endpoints, and governance hooks.</dd>
+        <dt>Amazon Comprehend</dt>
+        <dd>Managed NLP for analyzing text (entities, sentiment, topics, classification, etc.).</dd>
+        <dt>Amazon Lex</dt>
+        <dd>Build conversational interfaces (chatbots/voice) using intents and slots.</dd>
+        <dt>Amazon Transcribe</dt>
+        <dd>Speech-to-text transcription.</dd>
+        <dt>Amazon Translate</dt>
+        <dd>Machine translation between languages.</dd>
+        <dt>Amazon Polly</dt>
+        <dd>Text-to-speech (synthetic voices).</dd>
+        <dt>Amazon Rekognition</dt>
+        <dd>Image and video analysis (labels, faces, moderation, etc.).</dd>
+        <dt>Amazon Textract</dt>
+        <dd>Extract text, forms, and tables from documents and scans.</dd>
+      </dl>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide" data-i="8">
+      <span class="badge">1.3 · Lifecycle</span>
+      <h2>ML pipeline &amp; model sources</h2>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  C[Collect data] --> E[EDA]
+  E --> P[Preprocess]
+  P --> FE[Feature engineering]
+  FE --> TR[Train]
+  TR --> TU[Tune]
+  TU --> EV[Evaluate]
+  EV --> DP[Deploy]
+  DP --> MO[Monitor]
+  MO --> TR
+        </pre>
+      </div>
+      <ul>
+        <li><strong style="color:var(--text)">Model sources:</strong> pre-trained, open-source, custom training</li>
+        <li><strong style="color:var(--text)">Production use:</strong> managed API vs self-hosted endpoint</li>
+        <li><strong style="color:var(--text)">AWS mapping:</strong> Data Wrangler, Feature Store, Model Monitor, SageMaker stages (recognize at high level)</li>
+      </ul>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>ML pipeline (lifecycle)</dt>
+        <dd>The end-to-end sequence from data through deployment: collect → explore → clean → featurize → train → tune → evaluate → deploy → monitor (often looping).</dd>
+        <dt>Data collection</dt>
+        <dd>Gathering raw data from databases, APIs, logs, files, or streams for ML use.</dd>
+        <dt>EDA (exploratory data analysis)</dt>
+        <dd>Inspecting distributions, missing values, outliers, and relationships to guide cleaning and modeling choices.</dd>
+        <dt>Preprocessing</dt>
+        <dd>Cleaning, scaling, encoding, and transforming raw inputs into a usable form for training.</dd>
+        <dt>Feature engineering</dt>
+        <dd>Creating or selecting inputs (features) that improve model performance—domain-informed signals beyond raw fields.</dd>
+        <dt>Hyperparameter tuning</dt>
+        <dd>Searching settings <strong style="color:var(--text)">not</strong> learned from data (e.g. learning rate, tree depth) to improve validation performance.</dd>
+        <dt>Model evaluation</dt>
+        <dd>Measuring quality on held-out data with appropriate metrics before production release.</dd>
+        <dt>Deployment</dt>
+        <dd>Putting a trained model into production (endpoint, batch job, or embedded) so consumers can get predictions.</dd>
+        <dt>Monitoring (ML)</dt>
+        <dd>Watching data drift, concept drift, latency, errors, and business KPIs to know when to retrain or roll back.</dd>
+        <dt>Pre-trained model</dt>
+        <dd>A model already trained (by you or a provider) that you fine-tune or reuse instead of training from scratch.</dd>
+        <dt>Endpoint (model serving)</dt>
+        <dd>A network address (HTTP API) that hosts a model for real-time inference requests.</dd>
+        <dt>Amazon SageMaker Data Wrangler</dt>
+        <dd>Visual data preparation in SageMaker to clean and transform data for ML.</dd>
+        <dt>Amazon SageMaker Feature Store</dt>
+        <dd>A centralized store for ML features (training and serving) to keep definitions consistent.</dd>
+        <dt>Amazon SageMaker Model Monitor</dt>
+        <dd>Monitors deployed models for quality and drift compared to a baseline.</dd>
+      </dl>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide" data-i="9">
+      <span class="badge">1.3 · MLOps</span>
+      <h2>MLOps: repeatable, production-ready, monitored</h2>
+      <p>Experiments → reproducible pipelines → registry/releases → monitoring → retrain or rollback. Goal: models don’t silently degrade.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  subgraph dev["Experimentation"]
+    NB["Notebooks / trials"] --> EXP[Track experiments]
+  end
+  subgraph prod["Production readiness"]
+    PI["Reproducible pipelines"] --> REG[Model registry]
+    REG --> REL["Controlled releases"]
+  end
+  subgraph run["Operate"]
+    MON["Monitor drift / quality"] --> RET["Retrain / rollback"]
+  end
+  dev --> prod --> run
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>MLOps</dt>
+        <dd>Practices to deliver and run ML reliably in production: versioned data and models, automated pipelines, testing, releases, monitoring, and governance—similar spirit to DevOps for software.</dd>
+        <dt>Experiment tracking</dt>
+        <dd>Recording hyperparameters, datasets, code versions, and metrics so runs are comparable and reproducible.</dd>
+        <dt>Model registry</dt>
+        <dd>A catalog of model artifacts with versions, metadata, and promotion stages (staging/production).</dd>
+        <dt>Continuous integration / delivery (for ML)</dt>
+        <dd>Automated build/test/deploy of training and inference components so changes ship safely.</dd>
+        <dt>Data drift</dt>
+        <dd>Change in input data distribution over time; can hurt performance even if code is unchanged.</dd>
+        <dt>Concept drift</dt>
+        <dd>The relationship between inputs and labels changes (the “world” changes); the old model becomes misaligned.</dd>
+        <dt>Retraining</dt>
+        <dd>Training again on newer data or labels to refresh the model after drift or new patterns.</dd>
+      </dl>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide" data-i="10">
+      <span class="badge">1.3 · Metrics</span>
+      <h2>Technical vs business metrics</h2>
+      <p><strong style="color:var(--text)">Model:</strong> accuracy, precision/recall, AUC-ROC, F1; MAE/RMSE for regression.</p>
+      <p><strong style="color:var(--text)">Business:</strong> cost per user, ROI, complaints, operational load from false positives, revenue.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  TM["Technical metrics: AUC, F1, RMSE"] --> Q{"Good enough for the business problem?"}
+  BM["Business metrics: ROI, cost, complaints, throughput"] --> Q
+  Q -->|No| I["Iterate: data, model, thresholds"]
+  Q -->|Yes| S["Ship / scale with governance"]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Technical (model) metrics</dt>
+        <dd>Quantitative scores on predictions vs labels—used to compare models and thresholds mathematically.</dd>
+        <dt>Accuracy</dt>
+        <dd>Fraction of correct predictions among all examples (can mislead with imbalanced classes).</dd>
+        <dt>Precision</dt>
+        <dd>Among positive predictions, how many were truly positive—important when false alarms are costly.</dd>
+        <dt>Recall (sensitivity)</dt>
+        <dd>Among actual positives, how many the model caught—important when missing positives is costly.</dd>
+        <dt>F1 score</dt>
+        <dd>Harmonic mean of precision and recall—balances both when you need a single number.</dd>
+        <dt>AUC-ROC</dt>
+        <dd>Area under the receiver operating characteristic curve—summarizes tradeoff between true/false positives across thresholds.</dd>
+        <dt>MAE / RMSE</dt>
+        <dd>Mean Absolute Error / Root Mean Squared Error—common regression error measures (punishes large errors more in RMSE).</dd>
+        <dt>Business metrics</dt>
+        <dd>Outcomes stakeholders care about: revenue, cost, CSAT, handle time, fraud dollars, ROI—not always aligned 1:1 with pure accuracy.</dd>
+        <dt>ROI (return on investment)</dt>
+        <dd>Value gained versus cost of building and operating the solution.</dd>
+      </dl>
+    </section>
+
+    <!-- 11 glossary -->
+    <section class="slide" data-i="11">
+      <span class="badge">Reference</span>
+      <h2>Master glossary (Domain 1)</h2>
+      <p style="font-size:0.9rem;">One-page recap of terms used in this deck—use for quick review before practice tests.</p>
+      <dl class="def-list compact">
+        <dt>AI · ML · DL</dt>
+        <dd>AI = smart behavior broadly; ML = learn from data; DL = deep neural nets for rich unstructured patterns.</dd>
+        <dt>Structured / unstructured · Tabular · Time series</dt>
+        <dd>Structured = rows/columns or time-ordered metrics; unstructured = text, image, audio, video.</dd>
+        <dt>Labeled / unlabeled</dt>
+        <dd>Labeled = training pairs with known targets; unlabeled = discover structure or use self-supervision.</dd>
+        <dt>Supervised · Unsupervised · Reinforcement</dt>
+        <dd>Supervised = learn X→y with labels; unsupervised = patterns without labels; RL = agent, environment, reward, policy.</dd>
+        <dt>Regression · Classification</dt>
+        <dd>Number vs category prediction.</dd>
+        <dt>Training · Inference · Batch · Real-time</dt>
+        <dd>Fit weights vs run model; bulk scoring vs low-latency API.</dd>
+        <dt>Pipeline stages</dt>
+        <dd>Collect → EDA → preprocess → features → train → tune → evaluate → deploy → monitor.</dd>
+        <dt>MLOps · Registry · Drift</dt>
+        <dd>Production ML discipline; versioned models; input or relationship changes over time.</dd>
+        <dt>Precision · Recall · F1 · AUC · MAE · RMSE</dt>
+        <dd>Classification tradeoffs and regression errors; always tie to business impact.</dd>
+      </dl>
+      <p class="hint">Scroll on this slide if needed · Continue for self-check recap</p>
+    </section>
+
+    <!-- 12 recap -->
+    <section class="slide" data-i="12">
+      <span class="badge">Recap · Self-check</span>
+      <h2>Before Domain 2</h2>
+      <ul>
+        <li>Define AI vs ML vs DL; name data types and label types</li>
+        <li>Pick supervised vs unsupervised for a scenario</li>
+        <li>Explain training vs inference; batch vs real-time</li>
+        <li>Recite lifecycle stages; what MLOps adds</li>
+        <li>Pair one technical metric with one business metric for the same use case</li>
+      </ul>
+      <p class="hint">Official guide: AIF-C01 exam guide on AWS Skill Builder / docs.aws.amazon.com · Next lesson: Domain 2 Generative AI</p>
+    </section>
+  </div>
+
+  <div class="toolbar">
+    <button type="button" id="prev" aria-label="Previous slide">← Prev</button>
+    <span class="progress" id="progress">1 / 13</span>
+    <button type="button" id="next" aria-label="Next slide">Next →</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      let idx = 0;
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "neutral",
+        themeVariables: {
+          primaryColor: "#f5f5f7",
+          primaryTextColor: "#1d1d1f",
+          primaryBorderColor: "#0071e3",
+          lineColor: "#86868b",
+          secondaryColor: "#ffffff",
+          tertiaryColor: "#e8e8ed"
+        }
+      });
+
+      async function renderMermaidIn(slideEl) {
+        const nodes = slideEl.querySelectorAll(".mermaid");
+        for (const el of nodes) {
+          if (el.getAttribute("data-processed") === "true") continue;
+          const graph = el.textContent.trim();
+          if (!graph) continue;
+          const id = "mermaid-" + Math.random().toString(36).slice(2);
+          try {
+            const { svg } = await mermaid.render(id, graph);
+            el.innerHTML = svg;
+            el.setAttribute("data-processed", "true");
+          } catch (e) {
+            el.textContent = "(Diagram could not render — check network for Mermaid CDN)";
+          }
+        }
+      }
+
+      function update() {
+        slides.forEach((s, i) => s.classList.toggle("active", i === idx));
+        document.getElementById("progress").textContent = idx + 1 + " / " + slides.length;
+        document.getElementById("prev").disabled = idx === 0;
+        document.getElementById("next").disabled = idx === slides.length - 1;
+        renderMermaidIn(slides[idx]);
+      }
+
+      document.getElementById("prev").addEventListener("click", function () {
+        if (idx > 0) { idx--; update(); }
+      });
+      document.getElementById("next").addEventListener("click", function () {
+        if (idx < slides.length - 1) { idx++; update(); }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          if (idx < slides.length - 1) { idx++; update(); }
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          if (idx > 0) { idx--; update(); }
+        } else if (e.key === "Home") {
+          idx = 0; update();
+        } else if (e.key === "End") {
+          idx = slides.length - 1; update();
+        }
+      });
+
+      update();
+    })();
+  </script>
+</body>
+</html>
