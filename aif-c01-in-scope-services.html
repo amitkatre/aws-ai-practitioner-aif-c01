@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS AI Practitioner — In-Scope AWS Services (AIF-C01)</title>
+
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --text-2: #424245;
+      --muted: #86868b;
+      --border: rgba(0, 0, 0, 0.08);
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --slide-padding: clamp(1.25rem, 4vw, 3rem);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.47059;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(120% 80% at 50% -10%, #ffffff 0%, var(--bg) 45%), var(--bg);
+      pointer-events: none;
+    }
+    .deck { height: 100%; display: flex; flex-direction: column; }
+    .slide {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: var(--slide-padding);
+      padding-bottom: calc(var(--slide-padding) + 3.5rem);
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+      overflow-y: auto;
+      animation: fadeIn 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .slide.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.08;
+      margin-bottom: 0.35rem;
+    }
+    h2 {
+      font-size: clamp(1.2rem, 2.6vw, 1.65rem);
+      font-weight: 600;
+      color: var(--text-2);
+      margin-bottom: 0.75rem;
+    }
+    h3 { font-size: 1rem; font-weight: 600; margin: 1rem 0 0.4rem; color: var(--text); }
+    p, li { font-size: clamp(0.9rem, 1.85vw, 1.02rem); }
+    p { margin-bottom: 0.65rem; color: var(--muted); max-width: 58ch; }
+    .slide ul { margin: 0.35rem 0 0.75rem 1.1rem; color: var(--muted); }
+    .slide li { margin-bottom: 0.35rem; max-width: 62ch; }
+    .badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.7rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+    }
+    .title-slide .subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 54ch;
+      line-height: 1.4;
+    }
+    .source-link {
+      font-size: 0.85rem;
+      word-break: break-word;
+      margin-top: 0.5rem;
+    }
+    .source-link a { color: var(--accent); text-decoration: none; }
+    .source-link a:hover { text-decoration: underline; }
+    .callout {
+      background: #f5f5f7;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 0.9rem 1rem;
+      border-radius: 0 12px 12px 0;
+      margin: 0.85rem 0;
+      max-width: 58ch;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .callout strong { color: var(--text); }
+    .diagram-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem;
+      margin: 0.85rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    .diagram-wrap .mermaid { display: flex; justify-content: center; min-height: 100px; }
+    .diagram-wrap .mermaid svg { max-width: 100%; height: auto; }
+    .toolbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.7rem max(1.25rem, calc((100vw - 980px) / 2));
+      background: rgba(255, 255, 255, 0.72);
+      border-top: 1px solid var(--border);
+      backdrop-filter: saturate(180%) blur(20px);
+      z-index: 100;
+    }
+    .toolbar button {
+      font: inherit;
+      font-weight: 500;
+      font-size: 0.875rem;
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      padding: 0.55rem 1.35rem;
+      border-radius: 980px;
+      cursor: pointer;
+      min-width: 5.5rem;
+    }
+    .toolbar button:hover:not(:disabled) { background: var(--accent-hover); }
+    .toolbar button:disabled { opacity: 0.35; cursor: not-allowed; }
+    .progress { font-size: 0.8125rem; font-weight: 500; color: var(--muted); }
+    .hint { font-size: 0.75rem; color: var(--muted); margin-top: auto; padding-top: 1.25rem; }
+    h3.def-heading {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-top: 1.1rem;
+      font-weight: 600;
+    }
+    dl.def-list { margin: 0.4rem 0 0; max-width: 58ch; }
+    dl.def-list dt { font-weight: 600; font-size: 0.9rem; margin-top: 0.5rem; color: var(--text); }
+    dl.def-list dt:first-child { margin-top: 0; }
+    dl.def-list dd { font-size: 0.88rem; color: var(--muted); margin: 0.1rem 0 0; line-height: 1.45; }
+    .exam-table-wrap {
+      overflow-x: auto;
+      margin: 0.5rem 0 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.05);
+      max-width: 100%;
+    }
+    .exam-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .exam-table th,
+    .exam-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .exam-table th {
+      background: #f5f5f7;
+      font-weight: 600;
+      color: var(--text);
+      width: 34%;
+      white-space: nowrap;
+    }
+    .exam-table td { color: var(--muted); line-height: 1.4; }
+    .exam-table tr:last-child th,
+    .exam-table tr:last-child td { border-bottom: none; }
+    .exam-table caption {
+      caption-side: top;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 0.5rem 0.7rem 0.35rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <section class="slide active title-slide" data-i="0">
+      <span class="badge">AIF-C01 · Exam scope · Services</span>
+      <h1>In-Scope AWS Services</h1>
+      <p class="subtitle">Services the <strong style="color:var(--text)">AWS Certified AI Practitioner</strong> exam may reference—organized by category per AWS. List is <strong style="color:var(--text)">non-exhaustive</strong> and subject to change.</p>
+      <p class="source-link">Official list: <a href="https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-in-scope-services.md">In-Scope AWS Services (AIF-C01)</a><br />
+      Exam guide hub: <a href="https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html">AWS Certified AI Practitioner (AIF-C01)</a></p>
+      <p class="hint">← → · Space · Home / End · Printable table: <strong style="color:var(--text)">aif-c01-study-cheatsheet.html</strong></p>
+    </section>
+
+    <section class="slide" data-i="1">
+      <span class="badge">How to use this deck</span>
+      <h2>What the exam expects</h2>
+      <p>Each category slide has a table: <strong style="color:var(--text)">Service</strong> → <strong style="color:var(--text)">Exam focus</strong> (what scenarios or distractors often test). For a dense all-in-one view, open <strong style="color:var(--text)">aif-c01-study-cheatsheet.html</strong> in the same folder.</p>
+      <p>For these services, the <strong style="color:var(--text)">AI Practitioner</strong> exam focuses on <strong style="color:var(--text)">recognition, fit-for-purpose choice</strong>, and <strong style="color:var(--text)">high-level integration</strong>—not deep hands-on implementation of every feature.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  S[Service name] --> U[Typical use case]
+  U --> G[Governance cost security fit]
+        </pre>
+      </div>
+      <div class="callout"><strong>Always verify</strong> the live AWS documentation list before you book—the exam guide is updated over time.</div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>In scope</dt>
+        <dd>Topics and services AWS may use when writing questions; being listed does not mean every feature is tested.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="2">
+      <span class="badge">Analytics</span>
+      <h2>Analytics</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus (what to pick it for)</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">AWS Data Exchange</th><td>Subscribe to third‑party datasets in AWS for analytics/ML without building custom data supply contracts/pipes in scenarios about licensed data.</td></tr>
+            <tr><th scope="row">Amazon EMR</th><td>Large‑scale distributed processing (Spark/Hadoop) for heavy data prep or feature engineering before training.</td></tr>
+            <tr><th scope="row">AWS Glue</th><td>Serverless ETL, crawlers, and Data Catalog—glue between S3/lakes and downstream ML/analytics.</td></tr>
+            <tr><th scope="row">AWS Glue DataBrew</th><td>Visual, low‑code data prep for analysts when questions emphasize no‑code cleaning/standardization.</td></tr>
+            <tr><th scope="row">AWS Lake Formation</th><td>Fine‑grained governance and permissions on a data lake for compliant ML/analytics access.</td></tr>
+            <tr><th scope="row">Amazon OpenSearch Service</th><td>Full‑text and <strong style="color:var(--text)">k‑NN / vector</strong> search—classic distractor vs Kendra for “index/embed + similarity” RAG patterns.</td></tr>
+            <tr><th scope="row">Amazon QuickSight</th><td>BI dashboards and business metrics atop warehouses/lakes—when the stem asks for executive visibility, not model training.</td></tr>
+            <tr><th scope="row">Amazon Redshift</th><td>Cloud data warehouse/SQL analytics; training data or BI joins at warehouse scale.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout"><strong>Exam trick:</strong> Match <strong style="color:var(--text)">RAG retrieval</strong> to OpenSearch/vector DB options vs <strong style="color:var(--text)">enterprise ML search</strong> (Kendra) per scenario wording.</div>
+    </section>
+
+    <section class="slide" data-i="3">
+      <span class="badge">Cloud Financial Management</span>
+      <h2>Cloud Financial Management</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">AWS Budgets</th><td>Set spend alerts/thresholds when scenarios mention controlling FM inference, training, or token burn vs plan.</td></tr>
+            <tr><th scope="row">AWS Cost Explorer</th><td>Analyze historical cost by service/tags/accounts when questions need visibility into what drove AI spend.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="4">
+      <span class="badge">Compute &amp; Containers</span>
+      <h2>Compute &amp; containers</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Amazon EC2</th><td>GPU/CPU instances for custom training, BYO containers, or legacy lift‑and‑shift model servers when “full control / specific AMIs” appears.</td></tr>
+            <tr><th scope="row">AWS Lambda</th><td>Short event-driven invocations: glue around Bedrock/SageMaker, file triggers, lightweight API proxies—contrasts with long‑running GPU training on EC2.</td></tr>
+            <tr><th scope="row">Amazon ECS</th><td>AWS‑native container orchestration for scalable inference microservices or batch workers without running Kubernetes.</td></tr>
+            <tr><th scope="row">Amazon EKS</th><td>Managed Kubernetes when portability, complex multi‑service ML platforms, or standard K8s tooling is required.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="5">
+      <span class="badge">Database</span>
+      <h2>Database</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Amazon Aurora</th><td>Relational + often <strong style="color:var(--text)">Postgres-compatible vector</strong> workloads; transactional data next to embeddings.</td></tr>
+            <tr><th scope="row">Amazon RDS</th><td>Managed relational; “vector on Postgres” pattern in RAG/knowledge scenarios (vs OpenSearch k‑NN).</td></tr>
+            <tr><th scope="row">Amazon DocumentDB</th><td>Mongo‑style JSON documents; scenarios with document + embedding storage when Mongo API is implied.</td></tr>
+            <tr><th scope="row">Amazon DynamoDB</th><td>Low‑latency key‑value for app metadata, sessions, feature lookups—not your first pick for heavy similarity search alone.</td></tr>
+            <tr><th scope="row">Amazon ElastiCache</th><td>In‑memory cache to cut latency or repeated inference/retrieval cost in high‑QPS designs.</td></tr>
+            <tr><th scope="row">Amazon Neptune</th><td>Graph store; graph + vector / relationship‑heavy knowledge when edges matter between entities.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="6">
+      <span class="badge">Developer Tools</span>
+      <h2>Developer Tools</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Kiro</th><td>AWS builder/development experience (high‑level recognition)—pair with “accelerate coding with GenAI assistance” stems per current docs.</td></tr>
+            <tr><th scope="row">Strands Agents</th><td>Agent‑oriented builder tooling (recognition)—when answers reference agent development on AWS stack.</td></tr>
+            <tr><th scope="row">Amazon Q</th><td>GenAI assistant across IDE, console, or business apps—questions on “explain resource,” code help, internal doc Q&amp;A.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">Names change—reconcile with the live <strong style="color:var(--text)">in‑scope</strong> page before exam day.</div>
+    </section>
+
+    <section class="slide" data-i="7">
+      <span class="badge">Machine Learning · A–L</span>
+      <h2>Machine Learning (part 1)</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Amazon A2I</th><td>Human review for low‑confidence predictions or regulated approvals—vs fully automated inference only.</td></tr>
+            <tr><th scope="row">Amazon Bedrock</th><td>Primary managed GenAI entry: FMs, Knowledge Bases, Guardrails, Agents—default answer for “invoke FM securely at scale.”</td></tr>
+            <tr><th scope="row">Amazon Bedrock AgentCore</th><td>Platform primitives for building production agents on Bedrock when stems mention agent runtime/orchestration.</td></tr>
+            <tr><th scope="row">Amazon Comprehend</th><td>Managed NLP: entity, sentiment, PII, classification—choose when input is raw text buckets, not generative authoring.</td></tr>
+            <tr><th scope="row">Amazon Kendra</th><td>Enterprise ML search with connectors—contrast with “build your own vector DB in OpenSearch” for curated enterprise Q&amp;A.</td></tr>
+            <tr><th scope="row">Amazon Lex</th><td>Chat/voice bots with intents &amp; slots; conversational IVR/support—contrast with open‑ended FM chat.</td></tr>
+            <tr><th scope="row">Amazon Nova</th><td>AWS foundation model family available via Bedrock ecosystem—recognition under FM selection questions.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="8">
+      <span class="badge">Machine Learning · M–Z</span>
+      <h2>Machine Learning (part 2)</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Amazon Personalize</th><td>Real‑time recommendations (“customers who viewed”) vs training a bespoke FM from scratch.</td></tr>
+            <tr><th scope="row">Amazon Polly</th><td>Text‑to‑speech—voice output, IVR prompts, accessibility.</td></tr>
+            <tr><th scope="row">Amazon Rekognition</th><td>Image/video ML: labels, moderation, face detection workflows.</td></tr>
+            <tr><th scope="row">Amazon SageMaker AI</th><td>Full custom ML lifecycle (notebooks, training, endpoints, monitoring)—when you need BYO training, not only Bedrock APIs.</td></tr>
+            <tr><th scope="row">SageMaker JumpStart</th><td>Prebuilt models/solutions to start fast inside SageMaker vs coding pipelines from zero.</td></tr>
+            <tr><th scope="row">Amazon Textract</th><td>OCR + forms/tables from scans/PDFs—ingestion step before RAG or analytics.</td></tr>
+            <tr><th scope="row">Amazon Transcribe</th><td>Speech‑to‑text for calls, media captions, voice analytics pipelines.</td></tr>
+            <tr><th scope="row">Amazon Translate</th><td>Neural translation between languages in content/customer support scenarios.</td></tr>
+            <tr><th scope="row">AWS Transform</th><td>Modernization/transform programs to move legacy estates toward cloud‑ready analytics/AI consumption (recognition per guide).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="9">
+      <span class="badge">Management &amp; Governance</span>
+      <h2>Management and Governance</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">AWS CloudTrail</th><td>Who invoked Bedrock / SageMaker / IAM changes—audit trail for security &amp; forensics.</td></tr>
+            <tr><th scope="row">Amazon CloudWatch</th><td>Metrics, alarms, logs for latency/errors on endpoints, Lambdas, and operational health.</td></tr>
+            <tr><th scope="row">AWS Config</th><td>Record and rule‑check resource configurations (encryption on, tagging) for compliance drift.</td></tr>
+            <tr><th scope="row">AWS Trusted Advisor</th><td>Best‑practice checks (cost, security, limits)—“quick hygiene,” not full AI risk assessment.</td></tr>
+            <tr><th scope="row">AWS Well-Architected Tool</th><td>Structured reviews (incl. reliability/security pillars) for architecture documentation and gaps.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="10">
+      <span class="badge">Networking &amp; CDN</span>
+      <h2>Networking and Content Delivery</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Amazon VPC</th><td>Isolate subnets, security groups, private access to models/data; prerequisite language for “no public internet.”</td></tr>
+            <tr><th scope="row">Amazon CloudFront</th><td>CDN edge caching for global latency of apps, APIs, or static assets fronting AI experiences.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="11">
+      <span class="badge">Security, Identity, and Compliance</span>
+      <h2>Security, Identity, and Compliance</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">AWS IAM</th><td>Least‑privilege roles/policies for humans &amp; services invoking models and reading training data.</td></tr>
+            <tr><th scope="row">AWS KMS</th><td>Customer‑managed keys to encrypt datasets, artifacts, and secrets—audit/regulated scenarios.</td></tr>
+            <tr><th scope="row">AWS Secrets Manager</th><td>Rotate &amp; retrieve API keys/DB creds apps use next to GenAI pipelines.</td></tr>
+            <tr><th scope="row">Amazon Macie</th><td>Discover PII/sensitive data in S3—before fine‑tuning or indexing for RAG.</td></tr>
+            <tr><th scope="row">Amazon Inspector</th><td>Workloads vulnerability assessments where EC2/ECR workloads host ML services (recognition).</td></tr>
+            <tr><th scope="row">AWS Artifact</th><td>Download AWS compliance reports (SOC, etc.) for vendor due diligence.</td></tr>
+            <tr><th scope="row">AWS Audit Manager</th><td>Continuous evidence collection mapped to control frameworks for audits.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="12">
+      <span class="badge">Storage</span>
+      <h2>Storage</h2>
+      <div class="exam-table-wrap">
+        <table class="exam-table">
+          <caption>Service → typical exam scenario</caption>
+          <thead><tr><th scope="col">Service</th><th scope="col">Exam focus</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Amazon S3</th><td>Central lake for raw data, curated training sets, model artifacts, inference logs—default object store in AI scenarios.</td></tr>
+            <tr><th scope="row">Amazon S3 Glacier</th><td>Long‑term archival/retention when “rarely accessed training history or compliance” is required.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide" data-i="13">
+      <span class="badge">Also review</span>
+      <h2>Out-of-scope &amp; domain topics</h2>
+      <p>The same exam guide includes an <strong style="color:var(--text)">out-of-scope services</strong> list—review it so you do not over-study products AWS excludes from this exam.</p>
+      <p class="source-link"><a href="https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-out-of-scope-services.md">Out-of-Scope AWS Services (AIF-C01)</a></p>
+      <div class="callout">Your <strong style="color:var(--text)">Domain 1–5 slide decks</strong> explain concepts; this deck is a <strong style="color:var(--text)">service checklist</strong> aligned to AWS’s published scope.</div>
+    </section>
+
+    <section class="slide" data-i="14">
+      <span class="badge">Cheatsheet</span>
+      <h2>Printable study sheet</h2>
+      <p>Open <strong style="color:var(--text)">aif-c01-study-cheatsheet.html</strong> for all services + core terms in compact <strong style="color:var(--text)">tables</strong> (browser Print → PDF optional).</p>
+      <div class="callout"><strong>Unofficial aid only.</strong> Cross‑check the <a href="https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html" style="color:var(--accent)">official AIF-C01 guide</a> before your exam.</div>
+    </section>
+  </div>
+
+  <div class="toolbar">
+    <button type="button" id="prev" aria-label="Previous slide">← Prev</button>
+    <span class="progress" id="progress">1 / 15</span>
+    <button type="button" id="next" aria-label="Next slide">Next →</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    (function () {
+      var slides = Array.from(document.querySelectorAll(".slide"));
+      var idx = 0;
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "neutral",
+        themeVariables: {
+          primaryColor: "#f5f5f7",
+          primaryTextColor: "#1d1d1f",
+          primaryBorderColor: "#0071e3",
+          lineColor: "#86868b",
+          secondaryColor: "#ffffff",
+          tertiaryColor: "#e8e8ed"
+        }
+      });
+      async function renderMermaidIn(el) {
+        for (var node of el.querySelectorAll(".mermaid")) {
+          if (node.getAttribute("data-processed") === "true") continue;
+          var g = node.textContent.trim();
+          if (!g) continue;
+          try {
+            var out = await mermaid.render("m-" + Math.random().toString(36).slice(2), g);
+            node.innerHTML = out.svg;
+            node.setAttribute("data-processed", "true");
+          } catch (e) {
+            node.textContent = "(Diagram error)";
+          }
+        }
+      }
+      function update() {
+        slides.forEach(function (s, i) { s.classList.toggle("active", i === idx); });
+        document.getElementById("progress").textContent = idx + 1 + " / " + slides.length;
+        document.getElementById("prev").disabled = idx === 0;
+        document.getElementById("next").disabled = idx === slides.length - 1;
+        renderMermaidIn(slides[idx]);
+      }
+      document.getElementById("prev").addEventListener("click", function () { if (idx > 0) { idx--; update(); } });
+      document.getElementById("next").addEventListener("click", function () { if (idx < slides.length - 1) { idx++; update(); } });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          if (idx < slides.length - 1) { idx++; update(); }
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          if (idx > 0) { idx--; update(); }
+        } else if (e.key === "Home") { idx = 0; update(); }
+        else if (e.key === "End") { idx = slides.length - 1; update(); }
+      });
+      update();
+    })();
+  </script>
+</body>
+</html>
