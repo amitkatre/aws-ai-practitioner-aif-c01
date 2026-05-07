@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS AI Practitioner (AIF-C01) — Practice Exam · 50 Questions</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --text: #1d1d1f;
+      --muted: #86868b;
+      --accent: #0071e3;
+      --accent-h: #0077ed;
+      --border: rgba(0,0,0,.08);
+      --ok: #34c759;
+      --bad: #ff3b30;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.47;
+      padding: 2rem 1.25rem 5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    h1 { font-size: 2rem; font-weight: 600; letter-spacing: -.02em; margin: 0 0 .5rem; }
+    .sub { opacity: .9; color: var(--muted); margin-bottom: 1.5rem; font-size: 1.05rem; }
+    .toolbar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      border-top: 1px solid var(--border);
+      padding: .75rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      justify-content: center;
+      z-index: 20;
+    }
+    .toolbar button {
+      font: inherit;
+      font-weight: 500;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: .55rem 1.1rem;
+      border-radius: 980px;
+      cursor: pointer;
+    }
+    .toolbar button:hover { background: var(--accent-h); }
+    .toolbar button.secondary { background: #e8e8ed; color: var(--text); }
+    .toolbar button.secondary:hover { background: #d2d2d7; }
+    #scoreBox {
+      margin: 1rem 0;
+      padding: 1rem 1.2rem;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      display: none;
+    }
+    #scoreBox.show { display: block; }
+    #scoreBox strong { font-size: 1.1rem; }
+    .q {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.15rem 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    }
+    .q-header { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .35rem; }
+    .q-text { font-weight: 600; margin-bottom: .75rem; font-size: 1rem; }
+    .opts label {
+      display: flex;
+      gap: .6rem;
+      align-items: flex-start;
+      padding: .45rem .5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: .2rem;
+    }
+    .opts label:hover { background: #f5f5f7; }
+    .opts input { margin-top: .2rem; }
+    .key { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+    .key h2 { font-size: 1.25rem; }
+    .key ol { color: var(--muted); font-size: .9rem; line-height: 1.55; }
+    .hidden { display: none; }
+    .q.correct { box-shadow: 0 0 0 2px var(--ok); }
+    .q.incorrect { box-shadow: 0 0 0 2px var(--bad); }
+    .show-key .correct-answer { font-weight: 600; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Practice exam · 50 questions</h1>
+    <p class="sub">Unofficial practice aligned to the <strong>public</strong> AIF-C01 content domains. Not affiliated with AWS. Select an answer for each item, then <strong>Score exam</strong>. Distribution: D1×10 · D2×12 · D3×14 · D4×7 · D5×7.</p>
+    <div id="scoreBox" aria-live="polite"></div>
+    <div class="q" data-q="1" data-correct="B">
+      <div class="q-header">Domain 1 · Question 1</div>
+      <div class="q-text">Which statement best describes machine learning relative to artificial intelligence?</div>
+      <div class="opts">
+        <label><input type="radio" name="q1" value="A" id="q1_A" /> <span>A. ML is unrelated to AI; it only applies to databases.</span></label>
+        <label><input type="radio" name="q1" value="B" id="q1_B" /> <span>B. ML is a subset of AI where behavior improves from data without relying only on hand-written rules.</span></label>
+        <label><input type="radio" name="q1" value="C" id="q1_C" /> <span>C. AI is a subset of ML focused on neural networks only.</span></label>
+        <label><input type="radio" name="q1" value="D" id="q1_D" /> <span>D. Deep learning is the same as classical rules-based expert systems.</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="2" data-correct="B">
+      <div class="q-header">Domain 1 · Question 2</div>
+      <div class="q-text">A model predicts housing prices from labeled square footage and zip features. This is best described as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q2" value="A" id="q2_A" /> <span>A. Unsupervised clustering</span></label>
+        <label><input type="radio" name="q2" value="B" id="q2_B" /> <span>B. Supervised regression</span></label>
+        <label><input type="radio" name="q2" value="C" id="q2_C" /> <span>C. Reinforcement learning</span></label>
+        <label><input type="radio" name="q2" value="D" id="q2_D" /> <span>D. Batch inference only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="3" data-correct="B">
+      <div class="q-header">Domain 1 · Question 3</div>
+      <div class="q-text">Which pair correctly contrasts batch and real-time inference?</div>
+      <div class="opts">
+        <label><input type="radio" name="q3" value="A" id="q3_A" /> <span>A. Batch optimizes per-request latency; real-time optimizes total records per night.</span></label>
+        <label><input type="radio" name="q3" value="B" id="q3_B" /> <span>B. Batch scores many records on a schedule; real-time serves low-latency API requests.</span></label>
+        <label><input type="radio" name="q3" value="C" id="q3_C" /> <span>C. They are identical terms in AWS documentation.</span></label>
+        <label><input type="radio" name="q3" value="D" id="q3_D" /> <span>D. Real-time never uses GPUs.</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="4" data-correct="C">
+      <div class="q-header">Domain 1 · Question 4</div>
+      <div class="q-text">In the ML lifecycle, which stage typically happens immediately after model evaluation in many pipelines?</div>
+      <div class="opts">
+        <label><input type="radio" name="q4" value="A" id="q4_A" /> <span>A. Data collection</span></label>
+        <label><input type="radio" name="q4" value="B" id="q4_B" /> <span>B. Hyperparameter tuning</span></label>
+        <label><input type="radio" name="q4" value="C" id="q4_C" /> <span>C. Deployment</span></label>
+        <label><input type="radio" name="q4" value="D" id="q4_D" /> <span>D. Exploratory data analysis</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="5" data-correct="B">
+      <div class="q-header">Domain 1 · Question 5</div>
+      <div class="q-text">MLOps primarily aims to:</div>
+      <div class="opts">
+        <label><input type="radio" name="q5" value="A" id="q5_A" /> <span>A. Replace DevOps entirely for all companies.</span></label>
+        <label><input type="radio" name="q5" value="B" id="q5_B" /> <span>B. Make ML reproducible, monitorable, and production-ready with pipelines and governance.</span></label>
+        <label><input type="radio" name="q5" value="C" id="q5_C" /> <span>C. Guarantee 100% model accuracy.</span></label>
+        <label><input type="radio" name="q5" value="D" id="q5_D" /> <span>D. Remove the need for test data.</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="6" data-correct="B">
+      <div class="q-header">Domain 1 · Question 6</div>
+      <div class="q-text">F1 score is most useful when you need to balance:</div>
+      <div class="opts">
+        <label><input type="radio" name="q6" value="A" id="q6_A" /> <span>A. Training time and inference cost</span></label>
+        <label><input type="radio" name="q6" value="B" id="q6_B" /> <span>B. Precision and recall on a classification task</span></label>
+        <label><input type="radio" name="q6" value="C" id="q6_C" /> <span>C. S3 bucket size and Region count</span></label>
+        <label><input type="radio" name="q6" value="D" id="q6_D" /> <span>D. CPU vs GPU clock speed</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="7" data-correct="B">
+      <div class="q-header">Domain 1 · Question 7</div>
+      <div class="q-text">Which AWS service is a managed NLP API for text analysis tasks such as entities and sentiment?</div>
+      <div class="opts">
+        <label><input type="radio" name="q7" value="A" id="q7_A" /> <span>A. Amazon Polly</span></label>
+        <label><input type="radio" name="q7" value="B" id="q7_B" /> <span>B. Amazon Comprehend</span></label>
+        <label><input type="radio" name="q7" value="C" id="q7_C" /> <span>C. Amazon Textract</span></label>
+        <label><input type="radio" name="q7" value="D" id="q7_D" /> <span>D. AWS CloudTrail</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="8" data-correct="B">
+      <div class="q-header">Domain 1 · Question 8</div>
+      <div class="q-text">Concept drift means:</div>
+      <div class="opts">
+        <label><input type="radio" name="q8" value="A" id="q8_A" /> <span>A. The training code failed to compile.</span></label>
+        <label><input type="radio" name="q8" value="B" id="q8_B" /> <span>B. The relationship between inputs and targets changes over time, so the old model becomes misaligned.</span></label>
+        <label><input type="radio" name="q8" value="C" id="q8_C" /> <span>C. The VPC subnet ran out of IP addresses.</span></label>
+        <label><input type="radio" name="q8" value="D" id="q8_D" /> <span>D. Temperature was set too low on the FM.</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="9" data-correct="C">
+      <div class="q-header">Domain 1 · Question 9</div>
+      <div class="q-text">Which task is OUT of scope for the AWS Certified AI Practitioner foundational exam objective for implementers?</div>
+      <div class="opts">
+        <label><input type="radio" name="q9" value="A" id="q9_A" /> <span>A. Recognizing when ML is appropriate for a business case</span></label>
+        <label><input type="radio" name="q9" value="B" id="q9_B" /> <span>B. Describing the ML lifecycle at a high level</span></label>
+        <label><input type="radio" name="q9" value="C" id="q9_C" /> <span>C. Building and deploying a full custom training pipeline as the primary hands-on expectation</span></label>
+        <label><input type="radio" name="q9" value="D" id="q9_D" /> <span>D. Understanding batch vs real-time inference</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="10" data-correct="B">
+      <div class="q-header">Domain 1 · Question 10</div>
+      <div class="q-text">Amazon SageMaker is best described as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q10" value="A" id="q10_A" /> <span>A. A speech synthesizer only</span></label>
+        <label><input type="radio" name="q10" value="B" id="q10_B" /> <span>B. A broad AWS platform for building, training, deploying, and monitoring custom ML</span></label>
+        <label><input type="radio" name="q10" value="C" id="q10_C" /> <span>C. A billing-only dashboard</span></label>
+        <label><input type="radio" name="q10" value="D" id="q10_D" /> <span>D. A DNS service</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="11" data-correct="B">
+      <div class="q-header">Domain 2 · Question 11</div>
+      <div class="q-text">A foundation model (FM) is best described as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q11" value="A" id="q11_A" /> <span>A. A fixed rules engine for tax calculation</span></label>
+        <label><input type="radio" name="q11" value="B" id="q11_B" /> <span>B. A broad base model often pre-trained, adaptable via prompting, RAG, fine-tuning, or agents</span></label>
+        <label><input type="radio" name="q11" value="C" id="q11_C" /> <span>C. A single Excel macro</span></label>
+        <label><input type="radio" name="q11" value="D" id="q11_D" /> <span>D. Only usable for image classification with no text</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="12" data-correct="B">
+      <div class="q-header">Domain 2 · Question 12</div>
+      <div class="q-text">Why is chunking commonly used before embedding long documents?</div>
+      <div class="opts">
+        <label><input type="radio" name="q12" value="A" id="q12_A" /> <span>A. Chunking removes the need for vectors</span></label>
+        <label><input type="radio" name="q12" value="B" id="q12_B" /> <span>B. Chunks fit context limits and improve retrieval granularity for RAG-style patterns</span></label>
+        <label><input type="radio" name="q12" value="C" id="q12_C" /> <span>C. Chunking is only for video files</span></label>
+        <label><input type="radio" name="q12" value="D" id="q12_D" /> <span>D. AWS forbids embedding without chunking</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="13" data-correct="B">
+      <div class="q-header">Domain 2 · Question 13</div>
+      <div class="q-text">Amazon Bedrock is primarily:</div>
+      <div class="opts">
+        <label><input type="radio" name="q13" value="A" id="q13_A" /> <span>A. A relational database engine</span></label>
+        <label><input type="radio" name="q13" value="B" id="q13_B" /> <span>B. A managed service for accessing and customizing foundation models and related GenAI features</span></label>
+        <label><input type="radio" name="q13" value="C" id="q13_C" /> <span>C. An IoT protocol</span></label>
+        <label><input type="radio" name="q13" value="D" id="q13_D" /> <span>D. A mainframe emulator</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="14" data-correct="B">
+      <div class="q-header">Domain 2 · Question 14</div>
+      <div class="q-text">Higher temperature in FM sampling typically:</div>
+      <div class="opts">
+        <label><input type="radio" name="q14" value="A" id="q14_A" /> <span>A. Forces identical outputs every run</span></label>
+        <label><input type="radio" name="q14" value="B" id="q14_B" /> <span>B. Increases randomness and output diversity (and can increase hallucination risk)</span></label>
+        <label><input type="radio" name="q14" value="C" id="q14_C" /> <span>C. Disables token billing</span></label>
+        <label><input type="radio" name="q14" value="D" id="q14_D" /> <span>D. Only affects S3 storage class</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="15" data-correct="B">
+      <div class="q-header">Domain 2 · Question 15</div>
+      <div class="q-text">Token-based pricing for GenAI APIs typically charges by:</div>
+      <div class="opts">
+        <label><input type="radio" name="q15" value="A" id="q15_A" /> <span>A. Only the number of S3 buckets</span></label>
+        <label><input type="radio" name="q15" value="B" id="q15_B" /> <span>B. Input and output tokens consumed by the model</span></label>
+        <label><input type="radio" name="q15" value="C" id="q15_C" /> <span>C. Number of Route 53 hosted zones</span></label>
+        <label><input type="radio" name="q15" value="D" id="q15_D" /> <span>D. RDS Multi-AZ boolean flag</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="16" data-correct="A">
+      <div class="q-header">Domain 2 · Question 16</div>
+      <div class="q-text">Which option is a hallmark limitation of generative AI for factual enterprise use cases?</div>
+      <div class="opts">
+        <label><input type="radio" name="q16" value="A" id="q16_A" /> <span>A. Hallucinations and unsupported claims without grounding</span></label>
+        <label><input type="radio" name="q16" value="B" id="q16_B" /> <span>B. It cannot generate text</span></label>
+        <label><input type="radio" name="q16" value="C" id="q16_C" /> <span>C. It only runs on-premises with no cloud option</span></label>
+        <label><input type="radio" name="q16" value="D" id="q16_D" /> <span>D. It never uses GPUs</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="17" data-correct="A">
+      <div class="q-header">Domain 2 · Question 17</div>
+      <div class="q-text">SageMaker JumpStart is best described as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q17" value="A" id="q17_A" /> <span>A. A curated way to start with models, solutions, and notebooks inside SageMaker</span></label>
+        <label><input type="radio" name="q17" value="B" id="q17_B" /> <span>B. A VPC flow log parser only</span></label>
+        <label><input type="radio" name="q17" value="C" id="q17_C" /> <span>C. A hardware store for GPUs</span></label>
+        <label><input type="radio" name="q17" value="D" id="q17_D" /> <span>D. A replacement for IAM</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="18" data-correct="B">
+      <div class="q-header">Domain 2 · Question 18</div>
+      <div class="q-text">Which modality pair is most associated with a multimodal foundation model?</div>
+      <div class="opts">
+        <label><input type="radio" name="q18" value="A" id="q18_A" /> <span>A. Only CSV and JSON schema</span></label>
+        <label><input type="radio" name="q18" value="B" id="q18_B" /> <span>B. Text and images (or other cross-modal inputs/outputs)</span></label>
+        <label><input type="radio" name="q18" value="C" id="q18_C" /> <span>C. ICMP and UDP</span></label>
+        <label><input type="radio" name="q18" value="D" id="q18_D" /> <span>D. CloudFormation templates only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="19" data-correct="B">
+      <div class="q-header">Domain 2 · Question 19</div>
+      <div class="q-text">Provisioned throughput for a managed FM is most about:</div>
+      <div class="opts">
+        <label><input type="radio" name="q19" value="A" id="q19_A" /> <span>A. Deleting all logs</span></label>
+        <label><input type="radio" name="q19" value="B" id="q19_B" /> <span>B. Reserving capacity for predictable latency and spend versus pure on-demand bursts</span></label>
+        <label><input type="radio" name="q19" value="C" id="q19_C" /> <span>C. Disabling encryption</span></label>
+        <label><input type="radio" name="q19" value="D" id="q19_D" /> <span>D. Forcing batch-only inference</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="20" data-correct="B">
+      <div class="q-header">Domain 2 · Question 20</div>
+      <div class="q-text">RLHF is most closely associated with:</div>
+      <div class="opts">
+        <label><input type="radio" name="q20" value="A" id="q20_A" /> <span>A. Routing Lambda functions across Regions</span></label>
+        <label><input type="radio" name="q20" value="B" id="q20_B" /> <span>B. Aligning model behavior to human preference signals as part of training/fine-tuning</span></label>
+        <label><input type="radio" name="q20" value="C" id="q20_C" /> <span>C. Backing up EBS volumes</span></label>
+        <label><input type="radio" name="q20" value="D" id="q20_D" /> <span>D. Compiling C++ kernels</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="21" data-correct="B">
+      <div class="q-header">Domain 2 · Question 21</div>
+      <div class="q-text">Amazon Q (in AWS positioning) is best described as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q21" value="A" id="q21_A" /> <span>A. A DNS resolver</span></label>
+        <label><input type="radio" name="q21" value="B" id="q21_B" /> <span>B. An assistant-style product for builder/business productivity integrated with AWS and enterprise tools</span></label>
+        <label><input type="radio" name="q21" value="C" id="q21_C" /> <span>C. A graph database</span></label>
+        <label><input type="radio" name="q21" value="D" id="q21_D" /> <span>D. A Snowball appliance</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="22" data-correct="B">
+      <div class="q-header">Domain 2 · Question 22</div>
+      <div class="q-text">Business metrics for GenAI pilots should often include items such as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q22" value="A" id="q22_A" /> <span>A. Only BLEU score</span></label>
+        <label><input type="radio" name="q22" value="B" id="q22_B" /> <span>B. ROI, handle time, conversion, or cost per resolution—not only technical scores</span></label>
+        <label><input type="radio" name="q22" value="C" id="q22_C" /> <span>C. Only VPC subnet IDs</span></label>
+        <label><input type="radio" name="q22" value="D" id="q22_D" /> <span>D. Only EC2 instance families</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="23" data-correct="B">
+      <div class="q-header">Domain 3 · Question 23</div>
+      <div class="q-text">Retrieval-Augmented Generation (RAG) primarily improves factual grounding by:</div>
+      <div class="opts">
+        <label><input type="radio" name="q23" value="A" id="q23_A" /> <span>A. Removing the foundation model from the pipeline</span></label>
+        <label><input type="radio" name="q23" value="B" id="q23_B" /> <span>B. Retrieving relevant chunks and conditioning generation on that context</span></label>
+        <label><input type="radio" name="q23" value="C" id="q23_C" /> <span>C. Disabling embeddings</span></label>
+        <label><input type="radio" name="q23" value="D" id="q23_D" /> <span>D. Running only batch jobs</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="24" data-correct="B">
+      <div class="q-header">Domain 3 · Question 24</div>
+      <div class="q-text">Which AWS exam-guide example category can host vector search for embeddings?</div>
+      <div class="opts">
+        <label><input type="radio" name="q24" value="A" id="q24_A" /> <span>A. Only AWS IoT Core rules</span></label>
+        <label><input type="radio" name="q24" value="B" id="q24_B" /> <span>B. Amazon OpenSearch Service and managed database options that support vector patterns (e.g. RDS/Aurora Postgres with pgvector)</span></label>
+        <label><input type="radio" name="q24" value="C" id="q24_C" /> <span>C. Amazon Chime SDK only</span></label>
+        <label><input type="radio" name="q24" value="D" id="q24_D" /> <span>D. AWS Certificate Manager only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="25" data-correct="B">
+      <div class="q-header">Domain 3 · Question 25</div>
+      <div class="q-text">Agents for Amazon Bedrock most directly support:</div>
+      <div class="opts">
+        <label><input type="radio" name="q25" value="A" id="q25_A" /> <span>A. Static S3 website hosting without APIs</span></label>
+        <label><input type="radio" name="q25" value="B" id="q25_B" /> <span>B. Multi-step workflows that plan, call tools/APIs, and use retrieval</span></label>
+        <label><input type="radio" name="q25" value="C" id="q25_C" /> <span>C. Replacing KMS entirely</span></label>
+        <label><input type="radio" name="q25" value="D" id="q25_D" /> <span>D. Legacy COBOL transpilation only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="26" data-correct="B">
+      <div class="q-header">Domain 3 · Question 26</div>
+      <div class="q-text">Increasing max output tokens primarily affects:</div>
+      <div class="opts">
+        <label><input type="radio" name="q26" value="A" id="q26_A" /> <span>A. Only S3 object tags</span></label>
+        <label><input type="radio" name="q26" value="B" id="q26_B" /> <span>B. The upper bound on generated length (and often cost)</span></label>
+        <label><input type="radio" name="q26" value="C" id="q26_C" /> <span>C. VPC route table propagation speed</span></label>
+        <label><input type="radio" name="q26" value="D" id="q26_D" /> <span>D. KMS key rotation period</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="27" data-correct="B">
+      <div class="q-header">Domain 3 · Question 27</div>
+      <div class="q-text">Few-shot prompting means:</div>
+      <div class="opts">
+        <label><input type="radio" name="q27" value="A" id="q27_A" /> <span>A. Providing zero examples in the prompt</span></label>
+        <label><input type="radio" name="q27" value="B" id="q27_B" /> <span>B. Supplying a small number of labeled examples inside the prompt to steer formatting/behavior</span></label>
+        <label><input type="radio" name="q27" value="C" id="q27_C" /> <span>C. Running zero training epochs</span></label>
+        <label><input type="radio" name="q27" value="D" id="q27_D" /> <span>D. Deleting the knowledge base</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="28" data-correct="B">
+      <div class="q-header">Domain 3 · Question 28</div>
+      <div class="q-text">Prompt injection risk is best mitigated by a combination of controls such as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q28" value="A" id="q28_A" /> <span>A. Only using larger models with no other changes</span></label>
+        <label><input type="radio" name="q28" value="B" id="q28_B" /> <span>B. Isolation, least-privilege tool access, guardrails, and secure prompt/system boundaries</span></label>
+        <label><input type="radio" name="q28" value="C" id="q28_C" /> <span>C. Publishing root access keys in the prompt</span></label>
+        <label><input type="radio" name="q28" value="D" id="q28_D" /> <span>D. Disabling CloudTrail</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="29" data-correct="B">
+      <div class="q-header">Domain 3 · Question 29</div>
+      <div class="q-text">Instruction tuning typically refers to:</div>
+      <div class="opts">
+        <label><input type="radio" name="q29" value="A" id="q29_A" /> <span>A. Tuning CPU governors on EC2</span></label>
+        <label><input type="radio" name="q29" value="B" id="q29_B" /> <span>B. Supervised fine-tuning on instruction–response pairs to improve helpfulness/format adherence</span></label>
+        <label><input type="radio" name="q29" value="C" id="q29_C" /> <span>C. Only changing S3 lifecycle policies</span></label>
+        <label><input type="radio" name="q29" value="D" id="q29_D" /> <span>D. Patching the hypervisor</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="30" data-correct="A">
+      <div class="q-header">Domain 3 · Question 30</div>
+      <div class="q-text">ROUGE is most associated with evaluating:</div>
+      <div class="opts">
+        <label><input type="radio" name="q30" value="A" id="q30_A" /> <span>A. Summarization/text overlap-oriented quality</span></label>
+        <label><input type="radio" name="q30" value="B" id="q30_B" /> <span>B. RDS storage autoscaling</span></label>
+        <label><input type="radio" name="q30" value="C" id="q30_C" /> <span>C. Direct Connect redundancy</span></label>
+        <label><input type="radio" name="q30" value="D" id="q30_D" /> <span>D. WAF rule counts</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="31" data-correct="A">
+      <div class="q-header">Domain 3 · Question 31</div>
+      <div class="q-text">BERTScore is most associated with:</div>
+      <div class="opts">
+        <label><input type="radio" name="q31" value="A" id="q31_A" /> <span>A. Semantic similarity using contextual embeddings versus strict n-gram overlap</span></label>
+        <label><input type="radio" name="q31" value="B" id="q31_B" /> <span>B. Subnet sizing</span></label>
+        <label><input type="radio" name="q31" value="C" id="q31_C" /> <span>C. EBS throughput limits</span></label>
+        <label><input type="radio" name="q31" value="D" id="q31_D" /> <span>D. Route 53 health check intervals only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="32" data-correct="B">
+      <div class="q-header">Domain 3 · Question 32</div>
+      <div class="q-text">Cost tradeoff: fine-tuning a custom FM versus RAG-only often implies:</div>
+      <div class="opts">
+        <label><input type="radio" name="q32" value="A" id="q32_A" /> <span>A. RAG always has zero engineering cost</span></label>
+        <label><input type="radio" name="q32" value="B" id="q32_B" /> <span>B. Fine-tuning can improve specialization but raises MLOps burden and hosting complexity versus retrieval-first approaches</span></label>
+        <label><input type="radio" name="q32" value="C" id="q32_C" /> <span>C. Fine-tuning removes the need for evaluation</span></label>
+        <label><input type="radio" name="q32" value="D" id="q32_D" /> <span>D. RAG forbids private VPCs</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="33" data-correct="B">
+      <div class="q-header">Domain 3 · Question 33</div>
+      <div class="q-text">Top-p (nucleus) sampling is a technique to:</div>
+      <div class="opts">
+        <label><input type="radio" name="q33" value="A" id="q33_A" /> <span>A. Encrypt prompts at rest</span></label>
+        <label><input type="radio" name="q33" value="B" id="q33_B" /> <span>B. Truncate sampling mass to likely tokens to control diversity</span></label>
+        <label><input type="radio" name="q33" value="C" id="q33_C" /> <span>C. Provision NAT gateways</span></label>
+        <label><input type="radio" name="q33" value="D" id="q33_D" /> <span>D. Create IAM roles automatically</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="34" data-correct="A">
+      <div class="q-header">Domain 3 · Question 34</div>
+      <div class="q-text">When selecting an FM, context length is important because:</div>
+      <div class="opts">
+        <label><input type="radio" name="q34" value="A" id="q34_A" /> <span>A. It sets the maximum prompt + completion window available in one call</span></label>
+        <label><input type="radio" name="q34" value="B" id="q34_B" /> <span>B. It defines S3 maximum object size</span></label>
+        <label><input type="radio" name="q34" value="C" id="q34_C" /> <span>C. It replaces GDPR compliance</span></label>
+        <label><input type="radio" name="q34" value="D" id="q34_D" /> <span>D. It is always equal to 256 bytes</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="35" data-correct="B">
+      <div class="q-header">Domain 3 · Question 35</div>
+      <div class="q-text">Jailbreaking in GenAI typically refers to:</div>
+      <div class="opts">
+        <label><input type="radio" name="q35" value="A" id="q35_A" /> <span>A. Using multi-factor authentication</span></label>
+        <label><input type="radio" name="q35" value="B" id="q35_B" /> <span>B. Attempts to bypass safety policies or elicit disallowed outputs</span></label>
+        <label><input type="radio" name="q35" value="C" id="q35_C" /> <span>C. Migrating data to Glacier</span></label>
+        <label><input type="radio" name="q35" value="D" id="q35_D" /> <span>D. Enabling VPC Flow Logs</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="36" data-correct="A">
+      <div class="q-header">Domain 3 · Question 36</div>
+      <div class="q-text">Human evaluation for FM quality is valuable especially for:</div>
+      <div class="opts">
+        <label><input type="radio" name="q36" value="A" id="q36_A" /> <span>A. Situations where automated metrics do not capture helpfulness, safety, or business fit</span></label>
+        <label><input type="radio" name="q36" value="B" id="q36_B" /> <span>B. Replacing all logging</span></label>
+        <label><input type="radio" name="q36" value="C" id="q36_C" /> <span>C. Avoiding any documentation</span></label>
+        <label><input type="radio" name="q36" value="D" id="q36_D" /> <span>D. Eliminating IAM</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="37" data-correct="B">
+      <div class="q-header">Domain 4 · Question 37</div>
+      <div class="q-text">Amazon SageMaker Clarify is primarily used for:</div>
+      <div class="opts">
+        <label><input type="radio" name="q37" value="A" id="q37_A" /> <span>A. Billing reports only</span></label>
+        <label><input type="radio" name="q37" value="B" id="q37_B" /> <span>B. Bias and explainability analysis for models and data (exam-relevant capability)</span></label>
+        <label><input type="radio" name="q37" value="C" id="q37_C" /> <span>C. DNS failover</span></label>
+        <label><input type="radio" name="q37" value="D" id="q37_D" /> <span>D. Certificate issuance</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="38" data-correct="B">
+      <div class="q-header">Domain 4 · Question 38</div>
+      <div class="q-text">Guardrails for Amazon Bedrock is best described as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q38" value="A" id="q38_A" /> <span>A. A tool to remove all encryption</span></label>
+        <label><input type="radio" name="q38" value="B" id="q38_B" /> <span>B. Policy controls such as content filters and PII/topic constraints for GenAI applications</span></label>
+        <label><input type="radio" name="q38" value="C" id="q38_C" /> <span>C. A network load balancer</span></label>
+        <label><input type="radio" name="q38" value="D" id="q38_D" /> <span>D. A Hadoop cluster</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="39" data-correct="B">
+      <div class="q-header">Domain 4 · Question 39</div>
+      <div class="q-text">Subgroup analysis in responsible AI helps:</div>
+      <div class="opts">
+        <label><input type="radio" name="q39" value="A" id="q39_A" /> <span>A. Guarantee equal salaries for all employees automatically</span></label>
+        <label><input type="radio" name="q39" value="B" id="q39_B" /> <span>B. Surface disparate performance across segments that a global metric may hide</span></label>
+        <label><input type="radio" name="q39" value="C" id="q39_C" /> <span>C. Disable model monitoring</span></label>
+        <label><input type="radio" name="q39" value="D" id="q39_D" /> <span>D. Replace the need for datasets</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="40" data-correct="B">
+      <div class="q-header">Domain 4 · Question 40</div>
+      <div class="q-text">A Model Card commonly documents:</div>
+      <div class="opts">
+        <label><input type="radio" name="q40" value="A" id="q40_A" /> <span>A. Only the model&#x27;s favorite color</span></label>
+        <label><input type="radio" name="q40" value="B" id="q40_B" /> <span>B. Intended use, data, evaluation metrics, limitations, and ethical considerations</span></label>
+        <label><input type="radio" name="q40" value="C" id="q40_C" /> <span>C. Only EC2 pricing</span></label>
+        <label><input type="radio" name="q40" value="D" id="q40_D" /> <span>D. IAM password rotation schedules only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="41" data-correct="A">
+      <div class="q-header">Domain 4 · Question 41</div>
+      <div class="q-text">Amazon Augmented AI (A2I) supports:</div>
+      <div class="opts">
+        <label><input type="radio" name="q41" value="A" id="q41_A" /> <span>A. Human review workflows for predictions that need oversight</span></label>
+        <label><input type="radio" name="q41" value="B" id="q41_B" /> <span>B. Physical warehouse robots only</span></label>
+        <label><input type="radio" name="q41" value="C" id="q41_C" /> <span>C. Replacing SageMaker</span></label>
+        <label><input type="radio" name="q41" value="D" id="q41_D" /> <span>D. Deleting CloudTrail logs</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="42" data-correct="A">
+      <div class="q-header">Domain 4 · Question 42</div>
+      <div class="q-text">A key tension between stricter safety filtering and interpretability can be:</div>
+      <div class="opts">
+        <label><input type="radio" name="q42" value="A" id="q42_A" /> <span>A. Stronger safety stacks may reduce transparency into why outputs were blocked or altered</span></label>
+        <label><input type="radio" name="q42" value="B" id="q42_B" /> <span>B. There is never any tradeoff</span></label>
+        <label><input type="radio" name="q42" value="C" id="q42_C" /> <span>C. Safety filters always increase interpretability</span></label>
+        <label><input type="radio" name="q42" value="D" id="q42_D" /> <span>D. Interpretability removes safety needs</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="43" data-correct="B">
+      <div class="q-header">Domain 4 · Question 43</div>
+      <div class="q-text">Veracity in responsible AI most closely relates to:</div>
+      <div class="opts">
+        <label><input type="radio" name="q43" value="A" id="q43_A" /> <span>A. Subnet CIDR design</span></label>
+        <label><input type="radio" name="q43" value="B" id="q43_B" /> <span>B. Truthfulness of outputs relative to evidence and claims</span></label>
+        <label><input type="radio" name="q43" value="C" id="q43_C" /> <span>C. S3 request rate</span></label>
+        <label><input type="radio" name="q43" value="D" id="q43_D" /> <span>D. Lambda concurrency caps only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="44" data-correct="B">
+      <div class="q-header">Domain 5 · Question 44</div>
+      <div class="q-text">Under the shared responsibility model, which is generally a customer responsibility for AI apps on AWS?</div>
+      <div class="opts">
+        <label><input type="radio" name="q44" value="A" id="q44_A" /> <span>A. Physically securing data centers worldwide</span></label>
+        <label><input type="radio" name="q44" value="B" id="q44_B" /> <span>B. Configuring IAM least privilege for roles that invoke Bedrock and access training data</span></label>
+        <label><input type="radio" name="q44" value="C" id="q44_C" /> <span>C. Patching the hypervisor only by AWS field technicians with no customer input</span></label>
+        <label><input type="radio" name="q44" value="D" id="q44_D" /> <span>D. Operating regional power grids</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="45" data-correct="A">
+      <div class="q-header">Domain 5 · Question 45</div>
+      <div class="q-text">Amazon Macie is most useful for:</div>
+      <div class="opts">
+        <label><input type="radio" name="q45" value="A" id="q45_A" /> <span>A. Discovering and protecting sensitive data such as PII in S3-scale repositories</span></label>
+        <label><input type="radio" name="q45" value="B" id="q45_B" /> <span>B. Issuing TLS certificates</span></label>
+        <label><input type="radio" name="q45" value="C" id="q45_C" /> <span>C. Compiling deep learning kernels</span></label>
+        <label><input type="radio" name="q45" value="D" id="q45_D" /> <span>D. Managing ECS task placement</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="46" data-correct="A">
+      <div class="q-header">Domain 5 · Question 46</div>
+      <div class="q-text">AWS PrivateLink helps secure connectivity by:</div>
+      <div class="opts">
+        <label><input type="radio" name="q46" value="A" id="q46_A" /> <span>A. Providing private access to many AWS services without traversing the public internet</span></label>
+        <label><input type="radio" name="q46" value="B" id="q46_B" /> <span>B. Deleting all IAM policies</span></label>
+        <label><input type="radio" name="q46" value="C" id="q46_C" /> <span>C. Forcing plaintext HTTP</span></label>
+        <label><input type="radio" name="q46" value="D" id="q46_D" /> <span>D. Disabling VPC endpoints entirely</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="47" data-correct="A">
+      <div class="q-header">Domain 5 · Question 47</div>
+      <div class="q-text">AWS CloudTrail is primarily for:</div>
+      <div class="opts">
+        <label><input type="radio" name="q47" value="A" id="q47_A" /> <span>A. API audit logging and governance of account activity</span></label>
+        <label><input type="radio" name="q47" value="B" id="q47_B" /> <span>B. Generating embeddings</span></label>
+        <label><input type="radio" name="q47" value="C" id="q47_C" /> <span>C. Training transformers from scratch</span></label>
+        <label><input type="radio" name="q47" value="D" id="q47_D" /> <span>D. Purchasing Savings Plans only</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="48" data-correct="A">
+      <div class="q-header">Domain 5 · Question 48</div>
+      <div class="q-text">AWS Audit Manager is best described as:</div>
+      <div class="opts">
+        <label><input type="radio" name="q48" value="A" id="q48_A" /> <span>A. Helping collect continuous audit evidence aligned to controls and frameworks</span></label>
+        <label><input type="radio" name="q48" value="B" id="q48_B" /> <span>B. A relational migration tool only</span></label>
+        <label><input type="radio" name="q48" value="C" id="q48_C" /> <span>C. A game engine</span></label>
+        <label><input type="radio" name="q48" value="D" id="q48_D" /> <span>D. An image generator</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="49" data-correct="A">
+      <div class="q-header">Domain 5 · Question 49</div>
+      <div class="q-text">Encrypting model artifacts at rest with KMS is an example of:</div>
+      <div class="opts">
+        <label><input type="radio" name="q49" value="A" id="q49_A" /> <span>A. Customer responsibility for data protection in many architectures</span></label>
+        <label><input type="radio" name="q49" value="B" id="q49_B" /> <span>B. AWS-only responsibility with no customer keys possible</span></label>
+        <label><input type="radio" name="q49" value="C" id="q49_C" /> <span>C. A alternative to using any IAM roles</span></label>
+        <label><input type="radio" name="q49" value="D" id="q49_D" /> <span>D. A replacement for network segmentation</span></label>
+      </div>
+    </div>
+    <div class="q" data-q="50" data-correct="A">
+      <div class="q-header">Domain 5 · Question 50</div>
+      <div class="q-text">Data residency policies in governance most directly concern:</div>
+      <div class="opts">
+        <label><input type="radio" name="q50" value="A" id="q50_A" /> <span>A. Which geographic Region(s) data may be stored and processed in</span></label>
+        <label><input type="radio" name="q50" value="B" id="q50_B" /> <span>B. The color of the Bedrock console</span></label>
+        <label><input type="radio" name="q50" value="C" id="q50_C" /> <span>C. Lambda memory size</span></label>
+        <label><input type="radio" name="q50" value="D" id="q50_D" /> <span>D. Number of Git branches</span></label>
+      </div>
+    </div>
+
+    <div class="key">
+      <h2>Answer key</h2>
+      <p style="color:var(--muted); font-size:.9rem;">Hidden until you click <strong>Show answer key</strong> (after scoring optional).</p>
+      <ol id="answerList" class="hidden" style="margin-top:1rem;">
+        <li>Q1: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q2: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q3: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q4: <span class="correct-answer">C</span> (Domain 1)</li>
+        <li>Q5: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q6: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q7: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q8: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q9: <span class="correct-answer">C</span> (Domain 1)</li>
+        <li>Q10: <span class="correct-answer">B</span> (Domain 1)</li>
+        <li>Q11: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q12: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q13: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q14: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q15: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q16: <span class="correct-answer">A</span> (Domain 2)</li>
+        <li>Q17: <span class="correct-answer">A</span> (Domain 2)</li>
+        <li>Q18: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q19: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q20: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q21: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q22: <span class="correct-answer">B</span> (Domain 2)</li>
+        <li>Q23: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q24: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q25: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q26: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q27: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q28: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q29: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q30: <span class="correct-answer">A</span> (Domain 3)</li>
+        <li>Q31: <span class="correct-answer">A</span> (Domain 3)</li>
+        <li>Q32: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q33: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q34: <span class="correct-answer">A</span> (Domain 3)</li>
+        <li>Q35: <span class="correct-answer">B</span> (Domain 3)</li>
+        <li>Q36: <span class="correct-answer">A</span> (Domain 3)</li>
+        <li>Q37: <span class="correct-answer">B</span> (Domain 4)</li>
+        <li>Q38: <span class="correct-answer">B</span> (Domain 4)</li>
+        <li>Q39: <span class="correct-answer">B</span> (Domain 4)</li>
+        <li>Q40: <span class="correct-answer">B</span> (Domain 4)</li>
+        <li>Q41: <span class="correct-answer">A</span> (Domain 4)</li>
+        <li>Q42: <span class="correct-answer">A</span> (Domain 4)</li>
+        <li>Q43: <span class="correct-answer">B</span> (Domain 4)</li>
+        <li>Q44: <span class="correct-answer">B</span> (Domain 5)</li>
+        <li>Q45: <span class="correct-answer">A</span> (Domain 5)</li>
+        <li>Q46: <span class="correct-answer">A</span> (Domain 5)</li>
+        <li>Q47: <span class="correct-answer">A</span> (Domain 5)</li>
+        <li>Q48: <span class="correct-answer">A</span> (Domain 5)</li>
+        <li>Q49: <span class="correct-answer">A</span> (Domain 5)</li>
+        <li>Q50: <span class="correct-answer">A</span> (Domain 5)</li>
+      </ol>
+    </div>
+  </div>
+  <div class="toolbar">
+    <button type="button" id="scoreBtn">Score exam</button>
+    <button type="button" id="resetBtn" class="secondary">Reset</button>
+    <button type="button" id="keyBtn" class="secondary">Show / hide answer key</button>
+  </div>
+  <script>
+    (function () {
+      var qs = function () { return document.querySelectorAll(".q"); };
+      document.getElementById("scoreBtn").addEventListener("click", function () {
+        var nodes = qs();
+        var n = nodes.length;
+        var score = 0;
+        nodes.forEach(function (el) {
+          el.classList.remove("correct", "incorrect");
+          var ok = el.getAttribute("data-correct");
+          var inp = el.querySelector("input:checked");
+          if (inp && inp.value === ok) {
+            score++;
+            el.classList.add("correct");
+          } else if (inp) {
+            el.classList.add("incorrect");
+          }
+        });
+        var box = document.getElementById("scoreBox");
+        box.className = "show";
+        box.innerHTML = "<strong>Score: " + score + " / " + n + "</strong><p style="margin:.5rem 0 0;color:#86868b;font-size:.9rem">Unanswered items count as wrong. Review missed domains in your slide decks.</p>";
+      });
+      document.getElementById("resetBtn").addEventListener("click", function () {
+        document.querySelectorAll(".q input").forEach(function (i) { i.checked = false; });
+        qs().forEach(function (el) { el.classList.remove("correct", "incorrect"); });
+        document.getElementById("scoreBox").className = "";
+        document.getElementById("scoreBox").innerHTML = "";
+      });
+      document.getElementById("keyBtn").addEventListener("click", function () {
+        document.getElementById("answerList").classList.toggle("hidden");
+        document.body.classList.toggle("show-key");
+      });
+    })();
+  </script>
+</body>
+</html>
