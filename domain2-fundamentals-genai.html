@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS AI Practitioner — Domain 2: Fundamentals of Generative AI</title>
+
+  <style>
+    /* Visual language inspired by apple.com: neutral canvas, system type, minimal chrome */
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --text-2: #424245;
+      --muted: #86868b;
+      --border: rgba(0, 0, 0, 0.08);
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --ok: #34c759;
+      --slide-padding: clamp(1.25rem, 4vw, 3rem);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.47059;
+      position: relative;
+      font-synthesis: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(120% 80% at 50% -10%, #ffffff 0%, var(--bg) 45%),
+        var(--bg);
+      pointer-events: none;
+    }
+
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: var(--slide-padding);
+      padding-bottom: calc(var(--slide-padding) + 3.5rem);
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+      overflow-y: auto;
+      animation: fadeIn 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.015em;
+      line-height: 1.08;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: clamp(1.25rem, 2.8vw, 1.75rem);
+      font-weight: 600;
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.012em;
+      color: var(--text-2);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.15rem 0 0.45rem;
+      color: var(--text);
+    }
+
+    p, li {
+      font-size: clamp(0.94rem, 1.9vw, 1.0625rem);
+      max-width: 52ch;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+      color: var(--muted);
+    }
+
+    .slide ul {
+      margin: 0.5rem 0 1rem 1.1rem;
+      color: var(--muted);
+    }
+
+    .slide li {
+      margin-bottom: 0.45rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.69rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+    }
+
+    .title-slide h1 {
+      margin-bottom: 0.65rem;
+    }
+
+    .title-slide .subtitle {
+      font-size: 1.1875rem;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 50ch;
+      line-height: 1.4211;
+    }
+
+    .diagram-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.25rem 1.25rem 0.75rem;
+      margin: 1.1rem 0;
+      overflow-x: auto;
+      flex-shrink: 0;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .diagram-wrap .mermaid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 140px;
+    }
+
+    .diagram-wrap .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 0.65rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .callout {
+      background: #f5f5f7;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.15rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1rem 0;
+      max-width: 58ch;
+    }
+
+    .callout strong {
+      color: var(--text);
+    }
+
+    .toolbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.7rem max(1.25rem, calc((100vw - 980px) / 2));
+      background: rgba(255, 255, 255, 0.72);
+      border-top: 1px solid var(--border);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      z-index: 100;
+    }
+
+    .toolbar button {
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 0.875rem;
+      background: var(--accent);
+      border: none;
+      color: #ffffff;
+      padding: 0.55rem 1.35rem;
+      border-radius: 980px;
+      cursor: pointer;
+      min-width: 5.5rem;
+      transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
+    }
+
+    .toolbar button:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .toolbar button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .toolbar button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .progress {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: auto;
+      padding-top: 1.5rem;
+    }
+
+    .title-slide .hint {
+      margin-top: 2rem;
+    }
+
+    h3.def-heading {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-top: 1.35rem;
+      margin-bottom: 0.45rem;
+      font-weight: 600;
+    }
+
+    dl.def-list {
+      margin: 0 0 0.5rem;
+      max-width: 58ch;
+      padding: 0.5rem 0;
+    }
+
+    dl.def-list dt {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      margin-top: 0.6rem;
+    }
+
+    dl.def-list dt:first-child {
+      margin-top: 0;
+    }
+
+    dl.def-list dd {
+      color: var(--muted);
+      margin: 0.15rem 0 0;
+      padding: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .def-list.compact dd {
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <section class="slide active title-slide" data-i="0">
+      <span class="badge">AWS Certified AI Practitioner · Domain 2 · ~24%</span>
+      <h1>Fundamentals of Generative AI</h1>
+      <p class="subtitle">GenAI building blocks, foundation-model lifecycle, business fit, limits, and AWS services for generative apps—aligned to AIF-C01. Each topic slide ends with <strong style="color:var(--text)">Definitions</strong>; cram with the glossary slide.</p>
+      <p class="hint">Use ← → or Space · Pearson-style deck · Online for Mermaid CDN</p>
+    </section>
+
+    <section class="slide" data-i="1">
+      <span class="badge">2.1 · Core ideas</span>
+      <h2>What is generative AI?</h2>
+      <p><strong style="color:var(--text)">Generative AI</strong> creates new content (text, code, images, audio, structured answers) from learned patterns—usually driven by <strong style="color:var(--text)">large models</strong> and <strong style="color:var(--text)">prompts</strong> rather than only classifying existing rows.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  U["Prompt / instruction"] --> T[Tokenization]
+  T --> FM["Foundation model"]
+  FM --> O["Generated output"]
+        </pre>
+      </div>
+      <div class="callout"><strong>Exam angle:</strong> Know that GenAI centers on <strong style="color:var(--text)">tokens</strong>, <strong style="color:var(--text)">foundation models</strong>, <strong style="color:var(--text)">prompting</strong>, and often <strong style="color:var(--text)">transformers</strong>—not hand-tuned scoring rules alone.</div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Generative AI (GenAI)</dt>
+        <dd>Systems that <strong style="color:var(--text)">produce</strong> new samples or completions (sequences, pixels, waveforms) conditioned on input context—versus only predicting a fixed label.</dd>
+        <dt>Prompt</dt>
+        <dd>User or system text (or multimodal input) that steers the model toward a task, tone, format, or constraints.</dd>
+        <dt>Completion</dt>
+        <dd>The model’s continuation of the prompt—output tokens generated step by step.</dd>
+        <dt>Token</dt>
+        <dd>The atomic unit a model reads/writes (often subword pieces); prompts and outputs are split into tokens for processing and billing.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="2">
+      <span class="badge">2.1 · Representations</span>
+      <h2>Chunking · Embeddings · Vectors</h2>
+      <p><strong style="color:var(--text)">Chunking</strong> splits long documents for retrieval and context limits. <strong style="color:var(--text)">Embeddings</strong> map text/images into numeric <strong style="color:var(--text)">vectors</strong> so “similar meaning” is nearby in vector space—used heavily in search and RAG (Domain 3 goes deeper).</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  DOC["Long document / corpus"] --> CH[Chunking into segments]
+  CH --> E["Embedding model"]
+  E --> V["Vectors stored for similarity search"]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Chunking</dt>
+        <dd>Breaking content into smaller pieces (by size, sentences, or structure) so each piece fits model context windows and can be retrieved or cited independently.</dd>
+        <dt>Embedding</dt>
+        <dd>A learned numeric representation of data in a high-dimensional space; similar inputs get similar vectors—used for semantic search, clustering, and retrieval.</dd>
+        <dt>Vector</dt>
+        <dd>An ordered list of numbers representing a chunk, query, or item; distance metrics (e.g. cosine) measure similarity.</dd>
+        <dt>Context window</dt>
+        <dd>Maximum tokens a model can attend to in one forward pass; larger docs must be chunked, summarized, or retrieved selectively.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="3">
+      <span class="badge">2.1 · Models</span>
+      <h2>Transformers · LLMs · Foundation models</h2>
+      <p>Most modern text GenAI uses <strong style="color:var(--text)">transformer</strong> architectures. An <strong style="color:var(--text)">LLM</strong> is a large language model; a <strong style="color:var(--text)">foundation model (FM)</strong> is a broad base model (often pre-trained) you can adapt with prompts, tools, RAG, or fine-tuning.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  TR["Transformer blocks attention FFN"] --> LLM["Large language model LLM"]
+  LLM --> FM["Foundation model general capabilities"]
+  FM --> USE["Prompt RAG fine-tune agents"]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Transformer</dt>
+        <dd>Neural architecture using <strong style="color:var(--text)">self-attention</strong> to relate all tokens in context—scalable basis for modern LLMs.</dd>
+        <dt>Large language model (LLM)</dt>
+        <dd>A very large transformer (or mix of architectures) trained heavily on text to model language, knowledge, and task patterns.</dd>
+        <dt>Foundation model (FM)</dt>
+        <dd>A broad, often pre-trained model that can underpin many tasks (Q&amp;A, summarization, extraction) via prompting and customization paths.</dd>
+        <dt>Prompt engineering</dt>
+        <dd>Designing instructions, examples, and structure in prompts to improve quality, reliability, and safety—without changing model weights (in-context).</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="4">
+      <span class="badge">2.1 · Modalities</span>
+      <h2>Multimodal models · Diffusion models</h2>
+      <div class="two-col">
+        <div>
+          <h3>Multimodal</h3>
+          <p>One model jointly handles more than one input/output type (e.g. image + text).</p>
+          <div class="diagram-wrap">
+            <pre class="mermaid">
+flowchart LR
+  IMG[Image] --> MM["Multimodal FM"]
+  TX[Text] --> MM
+  MM --> OUT["Text caption answer or gen"]
+            </pre>
+          </div>
+        </div>
+        <div>
+          <h3>Diffusion</h3>
+          <p>Often used for image/audio generation: iterative denoising from random noise toward a sample.</p>
+          <div class="diagram-wrap">
+            <pre class="mermaid">
+flowchart LR
+  Z[Random noise] --> S["Many denoising steps"]
+  S --> G[Generated image or audio]
+            </pre>
+          </div>
+        </div>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Multimodal model</dt>
+        <dd>A model trained to align or fuse signals across modalities (text, vision, audio) for understanding or generation.</dd>
+        <dt>Diffusion model</dt>
+        <dd>A generative approach that learns to reverse a noise-corruption process—common for high-quality image generation and some audio models.</dd>
+        <dt>Modality</dt>
+        <dd>The type of data: text, image, speech, video, code, etc.—affects model choice and evaluation.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="5">
+      <span class="badge">2.1 · Lifecycle</span>
+      <h2>Foundation model lifecycle</h2>
+      <p>From raw corpora to production: select data and base model, pre-train, optionally fine-tune, evaluate, deploy, collect feedback. Most practitioners consume FMs from providers; fewer build from scratch.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  DS[Data selection] --> MS[Model selection]
+  MS --> PT[Pre-training]
+  PT --> FT[Fine-tuning optional]
+  FT --> EV[Evaluation]
+  EV --> DP[Deployment]
+  DP --> FB["User feedback and monitoring"]
+  FB -.-> EV
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Pre-training</dt>
+        <dd>Large-scale training (often self-supervised on broad data) to learn general representations before task-specific adaptation.</dd>
+        <dt>Fine-tuning</dt>
+        <dd>Additional training on a narrower dataset or objectives to specialize a model (domain, tone, format)—contrasts with <strong style="color:var(--text)">in-context</strong> learning via prompts alone.</dd>
+        <dt>Continuous pre-training</dt>
+        <dd>Further pre-training on new corpora to refresh knowledge while retaining base capabilities—requires care and governance.</dd>
+        <dt>RLHF (high level)</dt>
+        <dd>Reinforcement learning from human feedback: align model outputs with human preferences using reward modeling—exam may name it as a fine-tuning/alignment technique.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="6">
+      <span class="badge">2.2 · Use cases</span>
+      <h2>Where GenAI creates value</h2>
+      <p>Match modality and risk to the task: drafting, summarization, translation, code assist, search assistance, contact-center augmentation, content generation, personalization—always with human review where stakes are high.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  subgraph val["High-value patterns"]
+    D1["Draft and refine text"]
+    D2["Summarize long content"]
+    D3["Classify extract structure"]
+    D4["Code suggestion and tests"]
+    D5["Conversational assistants"]
+  end
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Summarization</dt>
+        <dd>Condensing source material into shorter faithful text—may be extractive (select spans) or abstractive (new phrasing).</dd>
+        <dt>Translation / localization</dt>
+        <dd>Converting content across languages or regional style; quality and domain vocabulary matter.</dd>
+        <dt>Code generation</dt>
+        <dd>Producing or editing source from natural-language intent; must be validated with tests and review.</dd>
+        <dt>Conversational agent</dt>
+        <dd>A dialogue system using an FM (often plus tools) to hold multi-turn tasks—exam links this to agents in later domains.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="7">
+      <span class="badge">2.2 · Reality check</span>
+      <h2>Strengths vs limits</h2>
+      <p>GenAI is fast and flexible but not an oracle. Expect <strong style="color:var(--text)">hallucinations</strong>, <strong style="color:var(--text)">nondeterminism</strong> (temperature), fairness gaps, and limited verifiability without retrieval or tools.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  subgraph pros["Advantages"]
+    P1["Broad generalization"]
+    P2["Rapid prototyping"]
+    P3["Natural language interface"]
+  end
+  subgraph cons["Risks and limits"]
+    C1["Hallucinations"]
+    C2["Nondeterminism"]
+    C3["Opaque reasoning"]
+    C4["Data and license sensitivity"]
+  end
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Hallucination</dt>
+        <dd>Plausible-sounding but false or unsupported statements—critical risk for factual, legal, or medical use cases.</dd>
+        <dt>Nondeterminism</dt>
+        <dd>With sampling (temperature &gt; 0), the same prompt can yield different outputs across runs—matters for testing and compliance.</dd>
+        <dt>Interpretability gap</dt>
+        <dd>Difficulty explaining <em>why</em> a specific token was generated; mitigated with citations (RAG), structured outputs, and audits.</dd>
+        <dt>Inaccuracy / staleness</dt>
+        <dd>Model knowledge may be outdated or wrong for niche domains—mitigate with retrieval, fine-tuning, or tool use.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="8">
+      <span class="badge">2.2 · Selection &amp; value</span>
+      <h2>Choosing models · Business metrics</h2>
+      <p>Balance <strong style="color:var(--text)">capability, latency, cost, context length, license, safety</strong>, and compliance. Tie pilots to <strong style="color:var(--text)">business KPIs</strong>, not only novelty scores.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  Q{"Model choice drivers"} --> A[Task modality]
+  Q --> B[Latency and throughput]
+  Q --> C[Cost tokens and hosting]
+  Q --> D["Compliance and data residency"]
+  Q --> E["Customization needs RAG fine-tune"]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Latency</dt>
+        <dd>Time to first token or full response—drives UX for interactive apps.</dd>
+        <dt>Throughput</dt>
+        <dd>Tokens or requests processed per second—matters at high volume.</dd>
+        <dt>Token-based pricing</dt>
+        <dd>Billing by input/output tokens consumed; major driver of cloud FM cost on fully managed APIs.</dd>
+        <dt>Provisioned throughput</dt>
+        <dd>Reserved model capacity for predictable performance and spend—versus on-demand bursting.</dd>
+        <dt>Business value metrics</dt>
+        <dd>Examples: handle time, conversion, cost per resolution, employee productivity, error reduction, revenue per user—paired with quality checks.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="9">
+      <span class="badge">2.3 · AWS GenAI stack</span>
+      <h2>Services you should recognize</h2>
+      <p><strong style="color:var(--text)">Amazon Bedrock</strong> is the FM hub (multiple providers, customization paths). <strong style="color:var(--text)">SageMaker JumpStart</strong> brings models and notebooks. <strong style="color:var(--text)">PartyRock</strong> is a playground for quick experimentation. <strong style="color:var(--text)">Amazon Q</strong> is the assistant experience across productivity and AWS.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  subgraph apps["Applications and UX"]
+    Q["Amazon Q"]
+    PR["PartyRock playground"]
+  end
+  subgraph fm["Foundation models"]
+    BR["Amazon Bedrock FMs tools guardrails"]
+  end
+  subgraph build["Build and ops"]
+    JS["SageMaker JumpStart"]
+    SM["SageMaker training and hosting"]
+  end
+  apps --> BR
+  build --> BR
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Amazon Bedrock</dt>
+        <dd>Fully managed service to invoke and customize foundation models from multiple providers, often with features for knowledge bases, agents, and guardrails.</dd>
+        <dt>SageMaker JumpStart</dt>
+        <dd>Curated models, solutions, and notebooks inside SageMaker to start quickly with pre-trained models and examples.</dd>
+        <dt>PartyRock</dt>
+        <dd>Amazon’s Bedrock-based playground for low-friction GenAI app experiments and learning (naming and features evolve—verify in AWS docs).</dd>
+        <dt>Amazon Q</dt>
+        <dd>AWS’s generative assistant product family for business and builder workflows—integrates with enterprise data and AWS consoles per AWS positioning.</dd>
+        <dt>Guardrails (Bedrock)</dt>
+        <dd>Configurable policies to filter undesirable topics, PII, or toxicity—part of responsible deployment on AWS.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="10">
+      <span class="badge">2.3 · Cloud tradeoffs</span>
+      <h2>Why AWS for GenAI · Cost dimensions</h2>
+      <p>AWS stresses security, compliance footprint, global regions, and integration with identity, storage, and data services. Costs hinge on <strong style="color:var(--text)">tokens</strong>, <strong style="color:var(--text)">infrastructure</strong>, <strong style="color:var(--text)">customization</strong>, and <strong style="color:var(--text)">reliability choices</strong>.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  subgraph savings["Cost and ops levers"]
+    L1["On-demand vs provisioned throughput"]
+    L2["Model size vs quality"]
+    L3["Caching and prompt design"]
+    L4["Region and redundancy choices"]
+  end
+        </pre>
+      </div>
+      <div class="callout"><strong>Exam pattern:</strong> Pick the lever—<strong style="color:var(--text)">performance vs cost</strong>, <strong style="color:var(--text)">availability</strong>, <strong style="color:var(--text)">data residency</strong>, <strong style="color:var(--text)">token pricing</strong>—for a scenario.</div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Shared responsibility model</dt>
+        <dd>AWS secures the cloud infrastructure; customers secure what they put <em>in</em> the cloud (data, IAM, app config)—applies to GenAI workloads.</dd>
+        <dt>Regional coverage</dt>
+        <dd>Choosing an AWS Region for data residency, latency, and which Bedrock models/features are available there.</dd>
+        <dt>Redundancy / availability</dt>
+        <dd>Design for fault tolerance (Multi-AZ, retries); higher resilience generally increases cost.</dd>
+        <dt>Custom model on Bedrock</dt>
+        <dd>Fine-tuned or continued-pretrained variants with their own hosting and pricing profile—exam may contrast with base on-demand inference.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="11">
+      <span class="badge">Reference</span>
+      <h2>Master glossary (Domain 2)</h2>
+      <p style="font-size:0.9rem;">Quick-review sheet aligned to Domain 2 task statements.</p>
+      <dl class="def-list compact">
+        <dt>GenAI · Prompt · Token · Completion</dt>
+        <dd>Produce new content; steering text; billing/read unit; model output stream.</dd>
+        <dt>Chunking · Embedding · Vector</dt>
+        <dd>Split long content; semantic numeric representation; similarity search unit.</dd>
+        <dt>Transformer · LLM · Foundation model</dt>
+        <dd>Attention-based architecture; large text model; broad base for many tasks.</dd>
+        <dt>Prompt engineering · Context window</dt>
+        <dd>In-context control; max tokens per call.</dd>
+        <dt>Multimodal · Diffusion</dt>
+        <dd>Multiple input/output types; denoising generative process.</dd>
+        <dt>Pre-training · Fine-tuning · RLHF</dt>
+        <dd>General training; specialization; human-preference alignment.</dd>
+        <dt>Hallucination · Nondeterminism</dt>
+        <dd>False fluency; varying outputs at same prompt.</dd>
+        <dt>Latency · Throughput · Token pricing · Provisioned throughput</dt>
+        <dd>Speed; scale; pay per token; reserved capacity.</dd>
+        <dt>Bedrock · JumpStart · PartyRock · Amazon Q</dt>
+        <dd>FM service; curated SageMaker starters; playground; assistant UX.</dd>
+      </dl>
+      <p class="hint">Scroll if needed · Next: recap and Domain 3 preview</p>
+    </section>
+
+    <section class="slide" data-i="12">
+      <span class="badge">Recap · Self-check</span>
+      <h2>Before Domain 3 (Foundation model apps)</h2>
+      <ul>
+        <li>Define tokens, embeddings, vectors, and chunking; explain why chunking matters</li>
+        <li>Contrast transformer LLM vs foundation model; name two non-text modalities</li>
+        <li>List three GenAI strengths and three risks (hallucination, nondeterminism, …)</li>
+        <li>Name four levers for model selection (latency, cost, compliance, customization)</li>
+        <li>Map a scenario to Bedrock vs JumpStart vs Q at a high level</li>
+      </ul>
+      <p class="hint">Official: AIF-C01 exam guide · Domain 3 covers RAG, agents, prompts in depth</p>
+    </section>
+  </div>
+
+  <div class="toolbar">
+    <button type="button" id="prev" aria-label="Previous slide">← Prev</button>
+    <span class="progress" id="progress">1 / 13</span>
+    <button type="button" id="next" aria-label="Next slide">Next →</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      let idx = 0;
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "neutral",
+        themeVariables: {
+          primaryColor: "#f5f5f7",
+          primaryTextColor: "#1d1d1f",
+          primaryBorderColor: "#0071e3",
+          lineColor: "#86868b",
+          secondaryColor: "#ffffff",
+          tertiaryColor: "#e8e8ed"
+        }
+      });
+
+      async function renderMermaidIn(slideEl) {
+        const nodes = slideEl.querySelectorAll(".mermaid");
+        for (const el of nodes) {
+          if (el.getAttribute("data-processed") === "true") continue;
+          const graph = el.textContent.trim();
+          if (!graph) continue;
+          const id = "mermaid-" + Math.random().toString(36).slice(2);
+          try {
+            const { svg } = await mermaid.render(id, graph);
+            el.innerHTML = svg;
+            el.setAttribute("data-processed", "true");
+          } catch (e) {
+            el.textContent = "(Diagram could not render — check network for Mermaid CDN)";
+          }
+        }
+      }
+
+      function update() {
+        slides.forEach((s, i) => s.classList.toggle("active", i === idx));
+        document.getElementById("progress").textContent = idx + 1 + " / " + slides.length;
+        document.getElementById("prev").disabled = idx === 0;
+        document.getElementById("next").disabled = idx === slides.length - 1;
+        renderMermaidIn(slides[idx]);
+      }
+
+      document.getElementById("prev").addEventListener("click", function () {
+        if (idx > 0) { idx--; update(); }
+      });
+      document.getElementById("next").addEventListener("click", function () {
+        if (idx < slides.length - 1) { idx++; update(); }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          if (idx < slides.length - 1) { idx++; update(); }
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          if (idx > 0) { idx--; update(); }
+        } else if (e.key === "Home") {
+          idx = 0; update();
+        } else if (e.key === "End") {
+          idx = slides.length - 1; update();
+        }
+      });
+
+      update();
+    })();
+  </script>
+</body>
+</html>
