@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIF-C01 — Study Cheatsheet (unofficial)</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --muted: #86868b;
+      --border: rgba(0, 0, 0, 0.1);
+      --accent: #0071e3;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.45;
+      font-size: 13px;
+      padding: clamp(1rem, 3vw, 2rem);
+      padding-bottom: 3rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 920px; margin: 0 auto; }
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; max-width: 70ch; }
+    .disclaimer {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 0.75rem 1rem;
+      border-radius: 0 10px 10px 0;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+    .links { margin-bottom: 1.25rem; font-size: 0.82rem; }
+    .links a { color: var(--accent); }
+    h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 1.75rem 0 0.5rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 2px solid var(--border);
+    }
+    h2:first-of-type { margin-top: 0.5rem; }
+    .sheet-table-wrap {
+      overflow-x: auto;
+      margin: 0.5rem 0 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+    }
+    table.sheet {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+    table.sheet th,
+    table.sheet td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.45rem 0.6rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.sheet th.term {
+      width: 28%;
+      font-weight: 600;
+      background: #f5f5f7;
+      white-space: nowrap;
+    }
+    table.sheet td.def { color: #424245; }
+    table.sheet tbody tr:last-child th,
+    table.sheet tbody tr:last-child td { border-bottom: none; }
+    table.sheet caption {
+      caption-side: top;
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      padding: 0.45rem 0.6rem 0.25rem;
+    }
+    .nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0 0; }
+    .nav a {
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      background: rgba(0, 113, 227, 0.08);
+    }
+    .nav a:hover { text-decoration: underline; }
+    @media print {
+      body { background: #fff; padding: 0.4in; font-size: 9pt; }
+      .no-print { display: none !important; }
+      .sheet-table-wrap { box-shadow: none; break-inside: avoid; }
+      h2 { break-after: avoid; page-break-after: avoid; }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>AIF-C01 study cheatsheet</h1>
+    <p class="sub">One-line cues for terms and in-scope AWS services. Unofficial; verify against the current <a href="https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html">exam guide</a>.</p>
+    <p class="disclaimer"><strong>Not from AWS.</strong> Use alongside <code>aif-c01-in-scope-services.html</code> and your domain decks. Lists and product names change over time.</p>
+    <div class="links no-print">
+      <a href="aif-c01-in-scope-services.html">In-scope services (slide deck)</a>
+      · <a href="https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/aif-01-in-scope-services.md">Official in-scope list</a>
+    </div>
+    <p class="nav no-print">
+      <a href="#terms">Terms</a>
+      <a href="#patterns">Patterns</a>
+      <a href="#responsible">Responsible AI</a>
+      <a href="#security">Security</a>
+      <a href="#services">Services</a>
+    </p>
+
+    <h2 id="terms">Core terms</h2>
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>AI / ML / GenAI</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Artificial intelligence (AI)</th><td class="def">Systems that perform tasks requiring human-like reasoning, perception, or decision support.</td></tr>
+          <tr><th scope="row" class="term">Machine learning (ML)</th><td class="def">Learns patterns from data to predict or decide without explicit step-by-step programming for every case.</td></tr>
+          <tr><th scope="row" class="term">Deep learning</th><td class="def">ML using layered neural nets—strong for images, text, speech at scale when data/compute allow.</td></tr>
+          <tr><th scope="row" class="term">Supervised learning</th><td class="def">Training on labeled input→output pairs (classification, regression).</td></tr>
+          <tr><th scope="row" class="term">Unsupervised learning</th><td class="def">Find structure without labels (clustering, anomaly patterns, dimensionality reduction).</td></tr>
+          <tr><th scope="row" class="term">Reinforcement learning</th><td class="def">Agent learns via rewards/penalties from environment interactions over time.</td></tr>
+          <tr><th scope="row" class="term">Training</th><td class="def">Fitting model parameters on historical data; typically batch, compute-heavy, offline.</td></tr>
+          <tr><th scope="row" class="term">Inference</th><td class="def">Running a trained model on new inputs for predictions or generated output.</td></tr>
+          <tr><th scope="row" class="term">Fine-tuning</th><td class="def">Adapting a pretrained model to a narrower domain/task with extra labeled or instruction data.</td></tr>
+          <tr><th scope="row" class="term">Foundation model (FM)</th><td class="def">Large pretrained model (often transformers) generalizing across many downstream tasks via prompting or adaptation.</td></tr>
+          <tr><th scope="row" class="term">Generative AI</th><td class="def">Models that synthesize new content (text, code, images) vs only classifying or scoring inputs.</td></tr>
+          <tr><th scope="row" class="term">Token</th><td class="def">Chunk of text a model processes/bills; context length = max tokens the model can consider at once.</td></tr>
+          <tr><th scope="row" class="term">Embedding</th><td class="def">Dense vector representing text/image meaning for similarity search and retrieval.</td></tr>
+          <tr><th scope="row" class="term">Hallucination</th><td class="def">Confident but false or unsupported model output; mitigated by grounding, guardrails, and evaluation.</td></tr>
+          <tr><th scope="row" class="term">Prompt</th><td class="def">Instruction + context given to an FM; prompt engineering shapes quality without weight updates.</td></tr>
+          <tr><th scope="row" class="term">Temperature</th><td class="def">Sampling randomness—lower = more deterministic; higher = more creative/varied.</td></tr>
+          <tr><th scope="row" class="term">RAG</th><td class="def">Retrieve relevant documents/chunks, then condition the FM—reduces hallucination and adds freshness.</td></tr>
+          <tr><th scope="row" class="term">Vector store / k-NN</th><td class="def">Stores embeddings and returns nearest neighbors for semantic search in RAG pipelines.</td></tr>
+          <tr><th scope="row" class="term">Agent</th><td class="def">FM + tools (API, search, code) that plans steps or calls actions, not single-shot completion.</td></tr>
+          <tr><th scope="row" class="term">MLOps</th><td class="def">Operational practices for reproducible training, deployment, monitoring, and rollback of ML.</td></tr>
+          <tr><th scope="row" class="term">Drift</th><td class="def">Data or concept change over time degrading model quality; needs monitoring and retraining.</td></tr>
+          <tr><th scope="row" class="term">Bias (ML)</th><td class="def">Systematic skew in predictions across groups—address with data, evaluation, and constraints.</td></tr>
+          <tr><th scope="row" class="term">Explainability</th><td class="def">Evidence of why a model produced an output (SHAP, attention, counterfactuals, simplified models).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Metrics (recognition)</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Accuracy</th><td class="def">Fraction of correct predictions across all classes.</td></tr>
+          <tr><th scope="row" class="term">Precision</th><td class="def">Of positive predictions, how many were true positives—care about false alarms in the positive class.</td></tr>
+          <tr><th scope="row" class="term">Recall</th><td class="def">Of actual positives, how many were found—care about missing positives.</td></tr>
+          <tr><th scope="row" class="term">F1</th><td class="def">Harmonic balance of precision and recall when you need one scalar score.</td></tr>
+          <tr><th scope="row" class="term">Confusion matrix</th><td class="def">Counts of TP/FP/TN/FN—basis for precision/recall and class imbalance analysis.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="patterns">Architecture patterns (exam stems)</h2>
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>“Which AWS …?” shortcuts</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Managed FM API</th><td class="def">Bedrock (models, Knowledge Bases, Guardrails, Agents).</td></tr>
+          <tr><th scope="row" class="term">Custom train + deploy lifecycle</th><td class="def">SageMaker AI; quick starts: JumpStart.</td></tr>
+          <tr><th scope="row" class="term">Enterprise doc Q&amp;A with connectors</th><td class="def">Kendra vs self-built RAG on OpenSearch/pgvector—match stem to “managed search product” vs DIY vectors.</td></tr>
+          <tr><th scope="row" class="term">Vector similarity at scale</th><td class="def">OpenSearch k-NN; Aurora/RDS Postgres extensions; Neptune for graph+vector cases.</td></tr>
+          <tr><th scope="row" class="term">Speech in / text out</th><td class="def">Transcribe.</td></tr>
+          <tr><th scope="row" class="term">Text in / audio out</th><td class="def">Polly.</td></tr>
+          <tr><th scope="row" class="term">OCR / forms from PDF</th><td class="def">Textract.</td></tr>
+          <tr><th scope="row" class="term">Image labels / moderation</th><td class="def">Rekognition.</td></tr>
+          <tr><th scope="row" class="term">Chatbot with intents</th><td class="def">Lex vs open-ended FM chat—Lex for structured dialog.</td></tr>
+          <tr><th scope="row" class="term">Recommendations</th><td class="def">Personalize.</td></tr>
+          <tr><th scope="row" class="term">Human in the loop</th><td class="def">A2I for review when confidence low or policy requires humans.</td></tr>
+          <tr><th scope="row" class="term">Datasets &amp; artifacts</th><td class="def">S3; long-term retention: Glacier.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="responsible">Responsible AI (pillars → tools)</h2>
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Fairness, explainability, privacy, robustness</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Fairness</th><td class="def">Measure disparate impact; Clarify (bias metrics), balanced data, Guardrails content/topic filters.</td></tr>
+          <tr><th scope="row" class="term">Explainability</th><td class="def">Clarify explainability; SHAP-style insights; human-readable rationales where feasible.</td></tr>
+          <tr><th scope="row" class="term">Privacy</th><td class="def">Minimize PII in prompts/training; Macie on S3; KMS encryption; avoid logging secrets.</td></tr>
+          <tr><th scope="row" class="term">Robustness / safety</th><td class="def">Guardrails (Bedrock), content filters, red-teaming, evaluation harnesses.</td></tr>
+          <tr><th scope="row" class="term">Transparency</th><td class="def">Document data lineage, model cards, human review (A2I) for high-stakes decisions.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="security">Security &amp; governance (shared + AWS)</h2>
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Controls that appear in scenario questions</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Least privilege</th><td class="def">IAM roles scoped to invoke model, read S3 prefix, use KMS key.</td></tr>
+          <tr><th scope="row" class="term">Audit who did what</th><td class="def">CloudTrail API history.</td></tr>
+          <tr><th scope="row" class="term">Encryption keys</th><td class="def">KMS CMKs for data at rest; TLS in transit.</td></tr>
+          <tr><th scope="row" class="term">Secrets in apps</th><td class="def">Secrets Manager (rotation) vs hard-coding API keys.</td></tr>
+          <tr><th scope="row" class="term">Config drift</th><td class="def">AWS Config rules on encryption, public access, tags.</td></tr>
+          <tr><th scope="row" class="term">Compliance evidence</th><td class="def">Audit Manager; Artifact for reports.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="services">In-scope services (exam one-liners)</h2>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Analytics</caption>
+        <tbody>
+          <tr><th scope="row" class="term">AWS Data Exchange</th><td class="def">Subscribe to third-party datasets inside AWS for ML/analytics.</td></tr>
+          <tr><th scope="row" class="term">Amazon EMR</th><td class="def">Distributed Spark/Hadoop for large-scale data prep before ML.</td></tr>
+          <tr><th scope="row" class="term">AWS Glue</th><td class="def">Serverless ETL, crawlers, Data Catalog for lake→analytics/ML pipelines.</td></tr>
+          <tr><th scope="row" class="term">AWS Glue DataBrew</th><td class="def">Visual data cleaning/normalization for analysts.</td></tr>
+          <tr><th scope="row" class="term">AWS Lake Formation</th><td class="def">Governance and fine-grained access on data lake assets.</td></tr>
+          <tr><th scope="row" class="term">Amazon OpenSearch Service</th><td class="def">Search + k-NN/vectors; common RAG retrieval backend.</td></tr>
+          <tr><th scope="row" class="term">Amazon QuickSight</th><td class="def">BI dashboards and metrics—not model training.</td></tr>
+          <tr><th scope="row" class="term">Amazon Redshift</th><td class="def">Cloud data warehouse; SQL analytics and joins for ML features.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Cloud financial management</caption>
+        <tbody>
+          <tr><th scope="row" class="term">AWS Budgets</th><td class="def">Alerts and limits when spend exceeds plans (incl. AI workloads).</td></tr>
+          <tr><th scope="row" class="term">AWS Cost Explorer</th><td class="def">Slice and analyze historical AWS costs by dimension.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Compute &amp; containers</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Amazon EC2</th><td class="def">VMs/GPUs for custom training or BYO hosting when managed APIs are not enough.</td></tr>
+          <tr><th scope="row" class="term">AWS Lambda</th><td class="def">Event-driven glue: invoke Bedrock/SageMaker, lightweight orchestration.</td></tr>
+          <tr><th scope="row" class="term">Amazon ECS</th><td class="def">Run containerized inference/training workers with AWS-native orchestration.</td></tr>
+          <tr><th scope="row" class="term">Amazon EKS</th><td class="def">Managed Kubernetes for portable, complex ML microservices.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Database</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Amazon Aurora</th><td class="def">Relational; often Postgres-compatible patterns incl. vectors with extensions.</td></tr>
+          <tr><th scope="row" class="term">Amazon RDS</th><td class="def">Managed SQL; vector-on-Postgres option for RAG indexes.</td></tr>
+          <tr><th scope="row" class="term">Amazon DocumentDB</th><td class="def">Mongo-compatible documents; document + embedding scenarios.</td></tr>
+          <tr><th scope="row" class="term">Amazon DynamoDB</th><td class="def">Low-latency key-value for app state, metadata—not primary semantic search engine.</td></tr>
+          <tr><th scope="row" class="term">Amazon ElastiCache</th><td class="def">In-memory cache to cut latency or repeated retrieval cost.</td></tr>
+          <tr><th scope="row" class="term">Amazon Neptune</th><td class="def">Graph DB; relationship-heavy knowledge + graph/vector patterns.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Developer tools</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Kiro</th><td class="def">AWS builder IDE/agent positioning—recognition for “accelerate development with AI.”</td></tr>
+          <tr><th scope="row" class="term">Strands Agents</th><td class="def">Agent builder tooling on AWS—recognition-level.</td></tr>
+          <tr><th scope="row" class="term">Amazon Q</th><td class="def">GenAI assistant in IDE, console, and business workflows.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Machine learning — A–L</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Amazon A2I</th><td class="def">Human review workflows for low-confidence or regulated predictions.</td></tr>
+          <tr><th scope="row" class="term">Amazon Bedrock</th><td class="def">Primary managed FM layer: models, Knowledge Bases, Guardrails, Agents.</td></tr>
+          <tr><th scope="row" class="term">Amazon Bedrock AgentCore</th><td class="def">Building blocks for production agents on Bedrock.</td></tr>
+          <tr><th scope="row" class="term">Amazon Comprehend</th><td class="def">Managed NLP: entities, sentiment, classification, PII.</td></tr>
+          <tr><th scope="row" class="term">Amazon Kendra</th><td class="def">Enterprise intelligent search with connectors—contrast with DIY vector on OpenSearch.</td></tr>
+          <tr><th scope="row" class="term">Amazon Lex</th><td class="def">Conversational bots (intents/slots) for chat and voice.</td></tr>
+          <tr><th scope="row" class="term">Amazon Nova</th><td class="def">AWS FM family in Bedrock ecosystem—FM choice recognition.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Machine learning — M–Z</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Amazon Personalize</th><td class="def">Real-time recommendations for retail/media use cases.</td></tr>
+          <tr><th scope="row" class="term">Amazon Polly</th><td class="def">Text-to-speech synthesis.</td></tr>
+          <tr><th scope="row" class="term">Amazon Rekognition</th><td class="def">Image/video analysis: labels, moderation, faces.</td></tr>
+          <tr><th scope="row" class="term">Amazon SageMaker AI</th><td class="def">End-to-end custom ML build/train/deploy/monitor.</td></tr>
+          <tr><th scope="row" class="term">SageMaker JumpStart</th><td class="def">Prebuilt models and solution templates in SageMaker.</td></tr>
+          <tr><th scope="row" class="term">Amazon Textract</th><td class="def">Extract printed/handwritten text, forms, tables from documents.</td></tr>
+          <tr><th scope="row" class="term">Amazon Transcribe</th><td class="def">Speech-to-text for audio/video.</td></tr>
+          <tr><th scope="row" class="term">Amazon Translate</th><td class="def">Neural machine translation.</td></tr>
+          <tr><th scope="row" class="term">AWS Transform</th><td class="def">Modernization toward cloud-ready analytics/AI estates (per guide scope—verify naming).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Management &amp; governance</caption>
+        <tbody>
+          <tr><th scope="row" class="term">AWS CloudTrail</th><td class="def">API audit log for governance and investigations.</td></tr>
+          <tr><th scope="row" class="term">Amazon CloudWatch</th><td class="def">Metrics, alarms, logs for operational health.</td></tr>
+          <tr><th scope="row" class="term">AWS Config</th><td class="def">Resource inventory and rule-based compliance checks.</td></tr>
+          <tr><th scope="row" class="term">AWS Trusted Advisor</th><td class="def">Automated best-practice checks (cost, security, limits).</td></tr>
+          <tr><th scope="row" class="term">AWS Well-Architected Tool</th><td class="def">Structured workload reviews vs the Well-Architected pillars.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Networking &amp; CDN</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Amazon VPC</th><td class="def">Private networks, subnets, SGs—foundation for private AI endpoints and data paths.</td></tr>
+          <tr><th scope="row" class="term">Amazon CloudFront</th><td class="def">Global CDN for low-latency delivery of apps and static assets.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Security, identity, compliance</caption>
+        <tbody>
+          <tr><th scope="row" class="term">AWS IAM</th><td class="def">Users, roles, policies controlling access to models and data.</td></tr>
+          <tr><th scope="row" class="term">AWS KMS</th><td class="def">Encryption keys for data and secrets at rest.</td></tr>
+          <tr><th scope="row" class="term">AWS Secrets Manager</th><td class="def">Store and rotate application secrets (API keys, DB creds).</td></tr>
+          <tr><th scope="row" class="term">Amazon Macie</th><td class="def">Discover sensitive data (e.g. PII) in S3 before training or indexing.</td></tr>
+          <tr><th scope="row" class="term">Amazon Inspector</th><td class="def">Vulnerability scanning for EC2/ECR workloads (recognition).</td></tr>
+          <tr><th scope="row" class="term">AWS Artifact</th><td class="def">Download compliance reports and agreements.</td></tr>
+          <tr><th scope="row" class="term">AWS Audit Manager</th><td class="def">Continuous control evidence mapped to frameworks.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sheet-table-wrap">
+      <table class="sheet">
+        <caption>Storage</caption>
+        <tbody>
+          <tr><th scope="row" class="term">Amazon S3</th><td class="def">Object store for datasets, features, model artifacts, logs.</td></tr>
+          <tr><th scope="row" class="term">Amazon S3 Glacier</th><td class="def">Low-cost archival for long-retention model or data history.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="sub" style="margin-top:2rem;font-size:0.8rem;">End of cheatsheet. Print this page from your browser if you want a PDF.</p>
+  </div>
+</body>
+</html>
