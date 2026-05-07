@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS AI Practitioner — Domain 3: Applications of Foundation Models</title>
+
+  <style>
+    /* Visual language inspired by apple.com: neutral canvas, system type, minimal chrome */
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --text-2: #424245;
+      --muted: #86868b;
+      --border: rgba(0, 0, 0, 0.08);
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --ok: #34c759;
+      --slide-padding: clamp(1.25rem, 4vw, 3rem);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.47059;
+      position: relative;
+      font-synthesis: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(120% 80% at 50% -10%, #ffffff 0%, var(--bg) 45%),
+        var(--bg);
+      pointer-events: none;
+    }
+
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: var(--slide-padding);
+      padding-bottom: calc(var(--slide-padding) + 3.5rem);
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+      overflow-y: auto;
+      animation: fadeIn 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.015em;
+      line-height: 1.08;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: clamp(1.25rem, 2.8vw, 1.75rem);
+      font-weight: 600;
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.012em;
+      color: var(--text-2);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.15rem 0 0.45rem;
+      color: var(--text);
+    }
+
+    p, li {
+      font-size: clamp(0.94rem, 1.9vw, 1.0625rem);
+      max-width: 52ch;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+      color: var(--muted);
+    }
+
+    .slide ul {
+      margin: 0.5rem 0 1rem 1.1rem;
+      color: var(--muted);
+    }
+
+    .slide li {
+      margin-bottom: 0.45rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.69rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+    }
+
+    .title-slide h1 {
+      margin-bottom: 0.65rem;
+    }
+
+    .title-slide .subtitle {
+      font-size: 1.1875rem;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 50ch;
+      line-height: 1.4211;
+    }
+
+    .diagram-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.25rem 1.25rem 0.75rem;
+      margin: 1.1rem 0;
+      overflow-x: auto;
+      flex-shrink: 0;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .diagram-wrap .mermaid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 140px;
+    }
+
+    .diagram-wrap .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 0.65rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .callout {
+      background: #f5f5f7;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.15rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1rem 0;
+      max-width: 58ch;
+    }
+
+    .callout strong {
+      color: var(--text);
+    }
+
+    .toolbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.7rem max(1.25rem, calc((100vw - 980px) / 2));
+      background: rgba(255, 255, 255, 0.72);
+      border-top: 1px solid var(--border);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      z-index: 100;
+    }
+
+    .toolbar button {
+      font-family: inherit;
+      font-weight: 500;
+      font-size: 0.875rem;
+      background: var(--accent);
+      border: none;
+      color: #ffffff;
+      padding: 0.55rem 1.35rem;
+      border-radius: 980px;
+      cursor: pointer;
+      min-width: 5.5rem;
+      transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
+    }
+
+    .toolbar button:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .toolbar button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .toolbar button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .progress {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: auto;
+      padding-top: 1.5rem;
+    }
+
+    .title-slide .hint {
+      margin-top: 2rem;
+    }
+
+    h3.def-heading {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-top: 1.35rem;
+      margin-bottom: 0.45rem;
+      font-weight: 600;
+    }
+
+    dl.def-list {
+      margin: 0 0 0.5rem;
+      max-width: 58ch;
+      padding: 0.5rem 0;
+    }
+
+    dl.def-list dt {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      margin-top: 0.6rem;
+    }
+
+    dl.def-list dt:first-child {
+      margin-top: 0;
+    }
+
+    dl.def-list dd {
+      color: var(--muted);
+      margin: 0.15rem 0 0;
+      padding: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .def-list.compact dd {
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <section class="slide active title-slide" data-i="0">
+      <span class="badge">AWS Certified AI Practitioner · Domain 3 · ~28%</span>
+      <h1>Applications of Foundation Models</h1>
+      <p class="subtitle">FM selection, inference controls, RAG, vectors on AWS, agents, prompt design, customization, and evaluation—per AIF-C01. <strong style="color:var(--text)">Definitions</strong> on each topic slide plus a glossary.</p>
+      <p class="hint">Navigation: ← → · Space · Home / End</p>
+    </section>
+
+    <section class="slide" data-i="1">
+      <span class="badge">3.1 · Design</span>
+      <h2>Choosing a foundation model</h2>
+      <p>Trade off <strong style="color:var(--text)">task modality</strong>, <strong style="color:var(--text)">quality vs size</strong>, <strong style="color:var(--text)">latency</strong>, <strong style="color:var(--text)">context length</strong>, languages, customization needs, compliance, and <strong style="color:var(--text)">cost</strong>.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  START[Business task] --> M[Modality text image code]
+  M --> L[Latency and throughput]
+  L --> C[Context length and cost]
+  C --> G[Governance compliance]
+  G --> CH[Choose FM and path RAG FT etc]
+        </pre>
+      </div>
+      <div class="callout"><strong>Exam tip:</strong> Scenario questions often bundle “pick the cheapest acceptable latency model” with “need long documents” or “must stay in Region X.”</div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Modality</dt>
+        <dd>Input/output type the model supports: text, image, embeddings, etc.—must match your use case.</dd>
+        <dt>Model size / complexity</dt>
+        <dd>Larger models can be more capable but cost more and may run slower—balance against SLAs.</dd>
+        <dt>Context length</dt>
+        <dd>Max prompt + completion tokens in one call; drives how much document text fits without retrieval.</dd>
+        <dt>Customization need</dt>
+        <dd>Whether prompts alone suffice or you need RAG, fine-tuning, or agents for accuracy and tools.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="2">
+      <span class="badge">3.1 · Inference</span>
+      <h2>Inference parameters</h2>
+      <p><strong style="color:var(--text)">Temperature</strong> and <strong style="color:var(--text)">top-p / top-k</strong> control randomness. <strong style="color:var(--text)">Max output length</strong> caps tokens generated. Together they shape creativity vs determinism and <strong style="color:var(--text)">cost</strong>.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  subgraph ctrl["Controls"]
+    TEM["Temperature low focused high creative"]
+    LEN["Max output length"]
+  end
+  ctrl --> FM[Foundation model]
+  FM --> OUT[Completion]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Temperature</dt>
+        <dd>Sampling sharpness: lower values make outputs more deterministic; higher values increase diversity and hallucination risk.</dd>
+        <dt>Top-p / top-k</dt>
+        <dd>Truncate the sampling distribution to likely tokens—another way to tune randomness and quality.</dd>
+        <dt>Max output tokens</dt>
+        <dd>Hard cap on generated length; affects completeness of answers and token spend.</dd>
+        <dt>Stop sequences</dt>
+        <dd>Delimiters that halt generation early for structured formats.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="3">
+      <span class="badge">3.1 · RAG</span>
+      <h2>Retrieval-Augmented Generation</h2>
+      <p><strong style="color:var(--text)">RAG</strong> retrieves relevant chunks from a knowledge base, injects them into the prompt, then the FM answers—improving factual grounding versus “parametric memory” alone.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  Q[User query] --> E[Embed query]
+  E --> VS[Vector search]
+  VS --> CH[Top chunks]
+  CH --> FM[FM with context]
+  FM --> A[Answer]
+        </pre>
+      </div>
+      <p>On AWS, <strong style="color:var(--text)">Amazon Bedrock Knowledge Bases</strong> orchestrates ingestion, embeddings, and retrieval for Bedrock models.</p>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>RAG</dt>
+        <dd>Pattern: <strong style="color:var(--text)">retrieve</strong> evidence, <strong style="color:var(--text)">augment</strong> the prompt, <strong style="color:var(--text)">generate</strong>—reduces reliance on stale baked-in weights for facts.</dd>
+        <dt>Knowledge base</dt>
+        <dd>Curated document store plus retrieval pipeline (often vector search) feeding the model.</dd>
+        <dt>Grounding</dt>
+        <dd>Answering from retrieved sources; still requires citation discipline and evaluation.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="4">
+      <span class="badge">3.1 · Storage</span>
+      <h2>Embeddings and vector options on AWS</h2>
+      <p>The exam names services that can back <strong style="color:var(--text)">vector search</strong> for embeddings. Choice depends on ops model, scale, and existing data platforms.</p>
+      <ul>
+        <li><strong style="color:var(--text)">Amazon OpenSearch Service</strong> — k-NN / vector engine patterns</li>
+        <li><strong style="color:var(--text)">Amazon Aurora PostgreSQL</strong> / <strong style="color:var(--text)">Amazon RDS for PostgreSQL</strong> — pgvector-style extensions (per product docs)</li>
+        <li><strong style="color:var(--text)">Amazon Neptune</strong> — graph + vector workloads where relationships matter</li>
+        <li><strong style="color:var(--text)">Amazon DocumentDB</strong> (with MongoDB compatibility) — document + vector use cases where applicable</li>
+      </ul>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  EMB[Embedding vectors] --> VS[Vector store layer]
+  VS --> O[OpenSearch Aurora RDS PG Neptune DocumentDB]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Vector database / index</dt>
+        <dd>Storage and indexing optimized for similarity search over embeddings at scale.</dd>
+        <dt>Hybrid search</dt>
+        <dd>Combine keyword filters with vector similarity for better precision in enterprise corpora.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="5">
+      <span class="badge">3.1 · Customization</span>
+      <h2>Cost / complexity tradeoffs</h2>
+      <p>From cheapest/fastest to change to most invasive: <strong style="color:var(--text)">prompting</strong> (in-context) → <strong style="color:var(--text)">RAG</strong> → <strong style="color:var(--text)">fine-tuning</strong> / continued pre-training → train-from-scratch (rare for practitioners).</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  ICL["In-context prompts"] --> RAG[RAG + tools]
+  RAG --> FT[Fine-tuning custom model]
+  FT --> CPT["Continuous pre-training"]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>In-context learning</dt>
+        <dd>Steer behavior via instructions and examples in the prompt—no weight updates.</dd>
+        <dt>Fine-tuning</dt>
+        <dd>Train further on curated task data to specialize the model; higher cost and MLOps burden.</dd>
+        <dt>Continuous pre-training</dt>
+        <dd>Broadly refresh model knowledge on new corpora—more capacity than fine-tuning, more risk.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="6">
+      <span class="badge">3.1 · Agents</span>
+      <h2>Agents for multi-step tasks</h2>
+      <p><strong style="color:var(--text)">Agents</strong> (e.g. <strong style="color:var(--text)">Agents for Amazon Bedrock</strong>) plan and execute sequences: call APIs, query knowledge bases, then let the FM reason over results.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  G[User goal] --> P[Planner FM]
+  P --> KB[Knowledge base retrieval]
+  P --> API[Actions and APIs]
+  KB --> P
+  API --> P
+  P --> R[Final response]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Agent</dt>
+        <dd>Orchestration pattern: model decides <em>which</em> tool or retrieval step comes next until the task completes.</dd>
+        <dt>Tool / action</dt>
+        <dd>An allowed capability (API, database lookup, calculator) the agent can invoke with structured parameters.</dd>
+        <dt>ReAct-style loop (conceptual)</dt>
+        <dd>Alternate reasoning traces with actions; common pattern in exam discussions of agents.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="7">
+      <span class="badge">3.2 · Prompts</span>
+      <h2>Prompt engineering techniques</h2>
+      <p>Use clear <strong style="color:var(--text)">instructions</strong>, <strong style="color:var(--text)">context</strong>, formats, and optional <strong style="color:var(--text)">examples</strong>. Advanced patterns include <strong style="color:var(--text)">chain-of-thought</strong> for multi-step reasoning (used judiciously).</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  Z[Zero-shot instruction only] --> F[Few-shot with examples]
+  F --> COT[Chain-of-thought]
+  COT --> TMP[Prompt templates and roles]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Zero-shot</dt>
+        <dd>Ask the task with no labeled examples in the prompt.</dd>
+        <dt>Few-shot</dt>
+        <dd>Provide small exemplar input/output pairs to show the desired pattern.</dd>
+        <dt>Negative prompt</dt>
+        <dd>Tell the model what <em>not</em> to do—helps reduce unwanted behaviors or formats.</dd>
+        <dt>Prompt template</dt>
+        <dd>Reusable scaffold with slots for user input, policies, and structured output instructions.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="8">
+      <span class="badge">3.2 · Risks</span>
+      <h2>Prompt attacks and data risks</h2>
+      <p>Production systems must mitigate <strong style="color:var(--text)">prompt injection</strong>, <strong style="color:var(--text)">jailbreaks</strong>, training-data <strong style="color:var(--text)">poisoning</strong>, and unintended <strong style="color:var(--text)">data exposure</strong> in logs or downstream tools.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart TB
+  ATK[Untrusted user input] --> R1[Injection overrides system policy]
+  ATK --> R2[Jailbreak evades guardrails]
+  ATK --> R3[Poisoned docs hurt RAG]
+        </pre>
+      </div>
+      <p>Mitigations include <strong style="color:var(--text)">Guardrails for Amazon Bedrock</strong>, allow-listed tools, least-privilege IAM, sanitization, and human review for sensitive flows.</p>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Prompt injection</dt>
+        <dd>Malicious text that hijacks model behavior or leaks secrets by overriding instructions.</dd>
+        <dt>Jailbreak</dt>
+        <dd>Attempts to bypass safety policies or elicit disallowed outputs.</dd>
+        <dt>Data poisoning</dt>
+        <dd>Corrupting training or retrieval corpora to bias or sabotage outputs.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="9">
+      <span class="badge">3.3 · Training</span>
+      <h2>Fine-tuning and data preparation</h2>
+      <p><strong style="color:var(--text)">Instruction tuning</strong> aligns models to follow directions. Domain adaptation narrows vocabulary and style. Data must be <strong style="color:var(--text)">curated, representative, labeled</strong>, and governed; <strong style="color:var(--text)">RLHF</strong> can align outputs with human preference.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  CUR[Curate and label data] --> GOV[Governance and PII review]
+  GOV --> FT[Fine-tune or instruction tune]
+  FT --> EV[Evaluate on holdout]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Instruction tuning</dt>
+        <dd>Supervised fine-tune on instruction–response pairs to improve helpfulness and format adherence.</dd>
+        <dt>Domain adaptation</dt>
+        <dd>Specialize vocabulary and reasoning patterns for a vertical (legal, finance, internal jargon).</dd>
+        <dt>Representative data</dt>
+        <dd>Training or RAG corpora should mirror production demographics and edge cases to limit bias surprises.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="10">
+      <span class="badge">3.4 · Evaluation</span>
+      <h2>How you know the FM fits the business</h2>
+      <p>Combine <strong style="color:var(--text)">automatic metrics</strong>, <strong style="color:var(--text)">benchmarks</strong>, and <strong style="color:var(--text)">human evaluation</strong>. Map scores to outcomes: productivity, error rate, CSAT—not leaderboard chasing alone.</p>
+      <ul>
+        <li><strong style="color:var(--text)">ROUGE</strong> — overlap-oriented summarization quality</li>
+        <li><strong style="color:var(--text)">BLEU</strong> — n-gram overlap; common in machine translation history</li>
+        <li><strong style="color:var(--text)">BERTScore</strong> — semantic similarity using contextual embeddings</li>
+      </ul>
+      <div class="diagram-wrap">
+        <pre class="mermaid">
+flowchart LR
+  AUTO[ROUGE BLEU BERTScore] --> H[Human rubric eval]
+  H --> BIZ[Business KPIs ROI latency cost]
+        </pre>
+      </div>
+      <h3 class="def-heading">Definitions</h3>
+      <dl class="def-list">
+        <dt>Human evaluation</dt>
+        <dd>Annotators score helpfulness, correctness, safety—gold standard for subjective tasks.</dd>
+        <dt>Benchmark dataset</dt>
+        <dd>Standardized tasks for comparing models; watch for mismatch with your domain.</dd>
+        <dt>Business fit</dt>
+        <dd>Whether measured gains justify operational risk, cost, and governance overhead.</dd>
+      </dl>
+    </section>
+
+    <section class="slide" data-i="11">
+      <span class="badge">Reference</span>
+      <h2>Domain 3 master glossary</h2>
+      <dl class="def-list compact">
+        <dt>FM selection</dt>
+        <dd>Modality, latency, context, cost, compliance, customization.</dd>
+        <dt>Inference knobs</dt>
+        <dd>Temperature, top-p/k, max tokens, stop sequences.</dd>
+        <dt>RAG · Knowledge base</dt>
+        <dd>Retrieve, augment prompt, generate; Bedrock Knowledge Bases.</dd>
+        <dt>Vectors on AWS</dt>
+        <dd>OpenSearch, Aurora/RDS Postgres vectors, Neptune, DocumentDB—match to architecture questions.</dd>
+        <dt>Customization ladder</dt>
+        <dd>Prompt → RAG → fine-tune → continued pre-training.</dd>
+        <dt>Agents</dt>
+        <dd>Multi-step planning with tools and retrieval (Agents for Amazon Bedrock).</dd>
+        <dt>Prompting</dt>
+        <dd>Zero/few-shot, CoT, templates, negatives; watch injection/jailbreak risks.</dd>
+        <dt>Evaluation</dt>
+        <dd>ROUGE, BLEU, BERTScore, humans, business KPIs.</dd>
+      </dl>
+      <p class="hint">Longest weighted domain on the exam—review scenarios that combine RAG + guardrails + cost.</p>
+    </section>
+
+    <section class="slide" data-i="12">
+      <span class="badge">Recap</span>
+      <h2>Self-check before Domain 4</h2>
+      <ul>
+        <li>List five criteria for picking an FM and tie each to a business constraint</li>
+        <li>Explain temperature and max output length tradeoffs</li>
+        <li>Draw RAG mentally: query → embed → retrieve → prompt → answer</li>
+        <li>Name two AWS vector-capable services and when you might pick each (high level)</li>
+        <li>Contrast prompt-only vs RAG vs fine-tuning for a factual Q&amp;A scenario</li>
+        <li>Define jailbreak vs prompt injection; name one AWS mitigation feature</li>
+        <li>Name three evaluation metrics and one business metric for the same use case</li>
+      </ul>
+      <p class="hint">Next domain: Responsible AI (Domain 4) per AIF-C01 exam guide</p>
+    </section>
+  </div>
+
+  <div class="toolbar">
+    <button type="button" id="prev" aria-label="Previous slide">← Prev</button>
+    <span class="progress" id="progress">1 / 13</span>
+    <button type="button" id="next" aria-label="Next slide">Next →</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      let idx = 0;
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "neutral",
+        themeVariables: {
+          primaryColor: "#f5f5f7",
+          primaryTextColor: "#1d1d1f",
+          primaryBorderColor: "#0071e3",
+          lineColor: "#86868b",
+          secondaryColor: "#ffffff",
+          tertiaryColor: "#e8e8ed"
+        }
+      });
+
+      async function renderMermaidIn(slideEl) {
+        const nodes = slideEl.querySelectorAll(".mermaid");
+        for (const el of nodes) {
+          if (el.getAttribute("data-processed") === "true") continue;
+          const graph = el.textContent.trim();
+          if (!graph) continue;
+          const id = "mermaid-" + Math.random().toString(36).slice(2);
+          try {
+            const { svg } = await mermaid.render(id, graph);
+            el.innerHTML = svg;
+            el.setAttribute("data-processed", "true");
+          } catch (e) {
+            el.textContent = "(Diagram could not render — check network for Mermaid CDN)";
+          }
+        }
+      }
+
+      function update() {
+        slides.forEach((s, i) => s.classList.toggle("active", i === idx));
+        document.getElementById("progress").textContent = idx + 1 + " / " + slides.length;
+        document.getElementById("prev").disabled = idx === 0;
+        document.getElementById("next").disabled = idx === slides.length - 1;
+        renderMermaidIn(slides[idx]);
+      }
+
+      document.getElementById("prev").addEventListener("click", function () {
+        if (idx > 0) { idx--; update(); }
+      });
+      document.getElementById("next").addEventListener("click", function () {
+        if (idx < slides.length - 1) { idx++; update(); }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          if (idx < slides.length - 1) { idx++; update(); }
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          if (idx > 0) { idx--; update(); }
+        } else if (e.key === "Home") {
+          idx = 0; update();
+        } else if (e.key === "End") {
+          idx = slides.length - 1; update();
+        }
+      });
+
+      update();
+    })();
+  </script>
+</body>
+</html>
