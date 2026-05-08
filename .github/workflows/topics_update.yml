@@ -1,0 +1,20 @@
+name: Update repository topics
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-topics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update topics via GitHub API
+        env:
+          REPO: "amitkatre/aws-ai-practitioner-aif-c01"
+          TOPICS: '["aws","aws-certification","aif-c01","ai-practitioner","amazon-bedrock","generative-ai","machine-learning","exam-prep","study-guide","free"]'
+        run: |
+          echo "Updating topics for $REPO"
+          curl -X PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/$REPO/topics \
+            -d "{\"names\":$TOPICS}"
